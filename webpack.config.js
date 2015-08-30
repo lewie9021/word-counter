@@ -29,7 +29,9 @@ module.exports = (function() {
         output: {
             path: Path.join(__dirname, "dist"),
             filename: "bundle.js"
-        }
+        },
+        // Enable sourcemaps.
+        devtool: "source-map"
     });
 
     // Enable ES6 & JSX syntax.
