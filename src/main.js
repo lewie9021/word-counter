@@ -1,3 +1,6 @@
+import React from "react";
+import HelloWorld from "./components/HelloWorld";
+
 require("./sass/theme.scss");
 
-console.log("Hello World!");
+React.render(<HelloWorld />, document.getElementById("app"));

@@ -31,6 +31,9 @@ module.exports = (function() {
             path: Path.join(__dirname, "dist"),
             filename: "bundle.js"
         },
+        resolve: {
+            extensions: ["", ".js", ".jsx", ".scss", ".css"]
+        },
         // Enable sourcemaps.
         devtool: "source-map"
     });
