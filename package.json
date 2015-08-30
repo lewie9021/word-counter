@@ -1,0 +1,40 @@
+{
+  "name": "word-counter",
+  "version": "0.0.1",
+  "description": "Simple application that reports on word & character count statistics.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node_modules/.bin/webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lewie9021/word-counter.git"
+  },
+  "keywords": [
+    "word",
+    "counter",
+    "stats",
+    "characters",
+    "text"
+  ],
+  "author": "Lewis Barnes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lewie9021/word-counter/issues"
+  },
+  "homepage": "https://github.com/lewie9021/word-counter#readme",
+  "dependencies": {
+    "babel-core": "^5.8.23",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.20",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "lodash": "^3.10.1",
+    "node-sass": "^3.3.2",
+    "react": "^0.13.3",
+    "react-bootstrap": "^0.25.1",
+    "sass-loader": "^2.0.1",
+    "webpack": "^1.12.0",
+    "webpack-configurator": "^0.1.1"
+  }
+}
