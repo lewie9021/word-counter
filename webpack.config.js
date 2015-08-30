@@ -2,6 +2,7 @@ var Path = require("path");
 var Webpack = require("webpack");
 var WebpackConfig = require("webpack-configurator");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlPlugin = require("html-webpack-plugin");
 
 // Define how the sass-loader should be resolved.
 function extractTextResolver(config) {
@@ -61,7 +62,16 @@ module.exports = (function() {
         }]
     }, extractTextResolver);
 
+    // Extract any CSS from bundle.js into a separate file (style.css).
     config.plugin("extract-text", ExtractTextPlugin, ["style.css"]);
+
+    // Automagically generate a HTML once finished bundling.
+    config.plugin("html", HtmlPlugin, [{
+        title: "Word Counter",
+        filename: "index.html",
+        template: Path.join(srcPath, "index.html"),
+        inject: "body"
+    }]);
 
     // Resolve the configuration in a structure Webpack understands.
     return config.resolve();
