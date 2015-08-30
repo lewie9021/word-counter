@@ -59,6 +59,8 @@ module.exports = (function() {
         }]
     }, extractTextResolver);
 
+    config.plugin("extract-text", ExtractTextPlugin, ["style.css"]);
+
     // Resolve the configuration in a structure Webpack understands.
     return config.resolve();
 })();
