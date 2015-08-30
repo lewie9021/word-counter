@@ -44,6 +44,11 @@ module.exports = (function() {
         }
     });
 
+    // Enable misc files to required.
+    config.loader("url", {
+        test: /\.(woff2?|ttf|eot|svg)$/
+    });
+    
     // Enable SASS syntax.
     config.loader("sass", {
         test: /\.scss$/,
