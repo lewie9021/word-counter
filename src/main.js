@@ -1,6 +1,6 @@
 import React from "react";
-import HelloWorld from "./components/HelloWorld";
+import App from "./components/App";
 
 require("./sass/theme.scss");
 
-React.render(<HelloWorld />, document.getElementById("app"));
+React.render(<App />, document.getElementById("app"));
