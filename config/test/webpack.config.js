@@ -8,7 +8,7 @@ module.exports = (function() {
 
     // Define general configuration.
     config.merge({
-        entry: Path.join(rootPath, "src", "specs", "index.js"),
+        entry: Path.join(__dirname, "app.entry.js"),
         output: {
             path: Path.join(rootPath, "dist", "test"),
             filename: "bundle.js"
