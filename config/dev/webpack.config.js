@@ -22,13 +22,13 @@ function extractTextResolver(config) {
 
 module.exports = (function() {
     var config = new WebpackConfig();
-    var srcPath = Path.join(__dirname, "src");
+    var rootPath = Path.join(__dirname, "..", "..");
 
     // Define general configuration.
     config.merge({
-        entry: Path.join(srcPath, "main.js"),
+        entry: Path.join(rootPath, "src", "main.js"),
         output: {
-            path: Path.join(__dirname, "dist"),
+            path: Path.join(rootPath, "dist", "dev"),
             filename: "bundle.js"
         },
         resolve: {
@@ -77,7 +77,7 @@ module.exports = (function() {
     config.plugin("html", HtmlPlugin, [{
         title: "Word Counter",
         filename: "index.html",
-        template: Path.join(srcPath, "index.html"),
+        template: Path.join(rootPath, "src", "index.html"),
         inject: "body"
     }]);
 
