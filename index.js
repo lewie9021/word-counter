@@ -25,7 +25,7 @@ Commander
     .parse(process.argv);
 
 // Require the given mode (fallbacks on the dev config).
-config = require("./webpack.config." + (Commander.mode || "dev") + ".js");
+config = require("./config/" + (Commander.mode || "dev") + "/webpack.config");
 compiler = Webpack(config);
 
 // Check if we have directly passed a watch option or defined it within the configuration object.
