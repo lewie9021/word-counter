@@ -4,7 +4,7 @@
   "description": "Simple application that reports on word & character count statistics.",
   "main": "index.js",
   "scripts": {
-    "dev": "node_modules/.bin/webpack",
+    "dev": "node_modules/.bin/webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
