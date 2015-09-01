@@ -6,18 +6,18 @@ class StatsBucket extends Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
         stats: PropTypes.array.isRequired
-    };
+    }
     
     renderStats() {
-        return this.props.stats.map(stat => {
+        return this.props.stats.map((stat, index) => {
             return (
-                <ListGroupItem>
+                <ListGroupItem key={index}>
                     <span>{stat.name}</span>
                     <Badge pullRight={true}>{stat.value}</Badge>
                 </ListGroupItem>
             );
         });
-    };
+    }
     
     render() {
         var stats = this.renderStats();
