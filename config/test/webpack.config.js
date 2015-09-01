@@ -25,7 +25,10 @@ module.exports = (function() {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         query: {
-            optional: ["runtime"]
+            optional: [
+                "runtime",
+                "es7.classProperties"
+            ]
         }
     });
 
