@@ -101,7 +101,7 @@ function getSetences(paragraph) {
 }
 
 function getWords(sentence) {
-    return (sentence.match(/\w+/g) || []);
+    return (sentence.match(/('?\w+'?)+/g) || []);
 }
 
 function getSpaces(sentence) {
