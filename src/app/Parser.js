@@ -1,5 +1,11 @@
 import Stats from "./Stats";
 
+const blacklist = {
+    "it": null,
+    "the": null,
+    "that": null
+};
+
 class Parser {
 
     constructor() {
@@ -37,6 +43,9 @@ class Parser {
                 words.forEach(word => {
                     var key = word.toLowerCase();
                     var count = (wordDensity[key] || 0);
+
+                    if (key in blacklist)
+                        return;
 
                     wordDensity[key] = count + 1;
                 });
