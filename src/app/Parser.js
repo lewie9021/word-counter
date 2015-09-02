@@ -71,7 +71,7 @@ class Parser {
     get() {
         return {
             details: this.details.get(),
-            wordDensity: this.wordDensity
+            wordDensity: this.wordDensity.sort(sortWordDensity)
         };
     }
     
@@ -97,6 +97,16 @@ function getWords(sentence) {
 
 function getSpaces(sentence) {
     return (sentence.match(/\s/g) || []);
+}
+
+function sortWordDensity(a, b) {
+    if ((a && a.value) < (b && b.value))
+        return 1;
+    
+    if ((a && a.value) > (b && b.value))
+        return -1;
+
+    return 0;
 }
 
 export default Parser;
