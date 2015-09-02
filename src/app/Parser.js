@@ -1,5 +1,82 @@
 import Stats from "./Stats";
 
+class Parser {
+
+    constructor() {
+        this.details = new Stats();
+        this.wordDensity = [];
+
+        this.details
+            .add("words", "Words")
+            .add("characters", "Characters")
+            .add("characters-no-spaces", "Characters (no spaces)")
+            .add("sentences", "Sentences")
+            // .add("words-average-sentence", "Average Words (sentence)")
+            // .add("characters-average-sentence", "Average Characters (sentence)")
+            .add("paragraphs", "Paragraphs");
+    }
+    
+    process(input) {
+        var paragraphs = getParagraphs(input);
+        var wordDensity = {};
+        var counts = {
+            sentences: 0,
+            words: 0,
+            spaces: 0
+        };
+        
+        paragraphs.forEach(paragraph => {
+            var sentences = getSetences(paragraph);
+
+            counts.sentences += sentences.length;
+
+            sentences.forEach(sentence => {
+                var words = getWords(sentence);
+                var spaces = getSpaces(sentence);
+
+                words.forEach(word => {
+                    var key = word.toLowerCase();
+                    var count = (wordDensity[key] || 0);
+
+                    wordDensity[key] = count + 1;
+                });
+
+                counts.words += words.length;
+                counts.spaces += spaces.length;
+            });
+        });
+
+        this.clearStats();
+        
+        this.details
+            .set("words", counts.words)
+            .set("characters", input.length)
+            .set("characters-no-spaces", input.length - counts.spaces)
+            .set("sentences", counts.sentences)
+            .set("paragraphs", paragraphs.length);
+
+        this.wordDensity = Object.keys(wordDensity).map(word => {
+            return {
+                name: word,
+                value: wordDensity[word]
+            };
+        });
+    }
+
+    clearStats() {
+        this.details.clear();
+        this.wordDensity = [];
+    }
+    
+    get() {
+        return {
+            details: this.details.get(),
+            wordDensity: this.wordDensity
+        };
+    }
+    
+}
+
 function getParagraphs(input) {
     // Get an array of paragraphs (strings).
     var paragraphs = (input.length ? input.split(/\n+/) : []);
@@ -20,68 +97,6 @@ function getWords(sentence) {
 
 function getSpaces(sentence) {
     return (sentence.match(/\s/g) || []);
-}
-
-class Parser {
-
-    constructor() {
-        this.details = new Stats();
-        this.wordDensity = new Stats();
-
-        this.details
-            .add("words", "Words")
-            .add("characters", "Characters")
-            .add("characters-no-spaces", "Characters (no spaces)")
-            .add("sentences", "Sentences")
-            // .add("words-average-sentence", "Average Words (sentence)")
-            // .add("characters-average-sentence", "Average Characters (sentence)")
-            .add("paragraphs", "Paragraphs");
-    }
-    
-    process(input) {
-        var paragraphs = getParagraphs(input);
-        var counts = {
-            sentences: 0,
-            words: 0,
-            spaces: 0
-        };
-        
-        paragraphs.forEach(paragraph => {
-            var sentences = getSetences(paragraph);
-
-            counts.sentences += sentences.length;
-
-            sentences.forEach(sentence => {
-                var words = getWords(sentence);
-                var spaces = getSpaces(sentence);
-
-                counts.words += words.length;
-                counts.spaces += spaces.length;
-            });
-        });
-
-        this.clearStats();
-        
-        this.details
-            .set("words", counts.words)
-            .set("characters", input.length)
-            .set("characters-no-spaces", input.length - counts.spaces)
-            .set("sentences", counts.sentences)
-            .set("paragraphs", paragraphs.length);
-    }
-
-    clearStats() {
-        this.details.clear();
-        this.wordDensity.clear();
-    }
-    
-    get() {
-        return {
-            details: this.details.get(),
-            wordDensity: this.wordDensity.get()
-        };
-    }
-    
 }
 
 export default Parser;

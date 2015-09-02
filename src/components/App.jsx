@@ -30,7 +30,7 @@ class App extends Component {
                         </Col>
                         <Col xs={12} md={4}>
                             <StatsBucket title="Details" stats={this.state.details} />
-                            {/* <StatsBucket title="Word Density" stats={this.state.wordDensity} /> */}
+                            <StatsBucket title="Word Density" stats={this.state.wordDensity} />
                         </Col>
                     </Row>
                 </Grid>
