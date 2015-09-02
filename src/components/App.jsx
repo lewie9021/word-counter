@@ -19,6 +19,7 @@ class App extends Component {
 
     render() {
         var brand = <a href="#/">Word Counter</a>;
+        var {details, wordDensity} = this.state;
         
         return (
             <div>
@@ -29,8 +30,8 @@ class App extends Component {
                             <TextArea parser={this.parser} onChange={this.onTextAreaChange.bind(this)} />
                         </Col>
                         <Col xs={12} md={4}>
-                            <StatsBucket title="Details" stats={this.state.details} />
-                            <StatsBucket title="Word Density" stats={this.state.wordDensity} />
+                            <StatsBucket title="Details" stats={details} />
+                            {wordDensity.length ? <StatsBucket title="Word Density" stats={wordDensity} /> : null}
                         </Col>
                     </Row>
                 </Grid>
