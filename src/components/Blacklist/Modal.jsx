@@ -18,7 +18,7 @@ class BlacklistModal extends Component {
     body() {
         return (
             <Modal.Body>
-                <BlacklistItems items={["the"]}/>
+                <BlacklistItems words={["the"]}/>
             </Modal.Body>
         );
     }
