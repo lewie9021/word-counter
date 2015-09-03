@@ -11,7 +11,20 @@ class App extends Component {
         super(props);
         
         this.parser = new Parser();
-        this.state = this.parser.get();
+        this.state = {
+            ...this.parser.get(),
+            blacklist: this.loadBlacklist()
+        };
+    }
+
+    loadBlacklist() {
+        // TODO: Retrieve the list from local storage (as an array) and convert it to a map.
+        // Note: We'll need defaults for on first visit.
+        return {
+            "it": null,
+            "the": null,
+            "that": null
+        };
     }
         
     onTextAreaChange() {
@@ -32,8 +45,11 @@ class App extends Component {
     
     render() {
         var brand = <a href="#/">Word Counter</a>;
-        var {details, wordDensity} = this.state;
-        
+        var {details, blacklist} = this.state;
+        var wordDensity = this.state.wordDensity.filter((word) => {
+            return !(word.name in blacklist);
+        });
+
         return (
             <div>
                 <Navbar brand={brand} inverse>
@@ -52,7 +68,11 @@ class App extends Component {
                         </Col>
                     </Row>
                 </Grid>
-                <BlacklistModal showModal={this.state.showModal} onHide={this.onHideBlacklist.bind(this)} />
+                <BlacklistModal
+                  showModal={this.state.showModal}
+                  onHide={this.onHideBlacklist.bind(this)}
+                  words={Object.keys(blacklist)}
+                />
             </div>
         );
     }

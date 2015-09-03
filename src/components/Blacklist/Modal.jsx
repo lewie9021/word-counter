@@ -7,6 +7,7 @@ import BlacklistItems from "./Items";
 // TODO: Remove Modal.x.
 class BlacklistModal extends Component {
 
+    
     header() {
         return (
             <Modal.Header closeButton>
@@ -18,7 +19,7 @@ class BlacklistModal extends Component {
     body() {
         return (
             <Modal.Body>
-                <BlacklistItems words={["the"]}/>
+                <BlacklistItems words={this.props.words}/>
             </Modal.Body>
         );
     }
