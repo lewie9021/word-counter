@@ -16,11 +16,15 @@ class BlacklistItem extends Component {
     }
 
     onEditClick() {
-        console.log("onEditClick");
+        this.setState({
+            mode: "edit"
+        });
     }
 
     onCancelClick() {
-        console.log("onCancelClick");   
+        this.setState({
+            mode: "view"
+        });
     }
 
     onSaveClick() {
