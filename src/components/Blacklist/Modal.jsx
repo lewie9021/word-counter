@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BlacklistItems from "./Items";
 
-// TODO: Retrieve items from props.
 // TODO: Method for each section might be overkill?
 // TODO: Remove Modal.x.
 class BlacklistModal extends Component {
-
     
     header() {
         return (
@@ -19,7 +17,7 @@ class BlacklistModal extends Component {
     body() {
         return (
             <Modal.Body>
-                <BlacklistItems words={this.props.words}/>
+                <BlacklistItems blacklist={this.props.blacklist} />
             </Modal.Body>
         );
     }

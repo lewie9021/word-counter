@@ -13,7 +13,9 @@ class BlacklistItem extends Component {
     }
     
     onRemoveClick() {
-        console.log("onRemoveClick");
+        var {blacklist, word} = this.props;
+        
+        blacklist.del(word);
     }
 
     onEditClick() {
@@ -30,7 +32,10 @@ class BlacklistItem extends Component {
     }
 
     onSaveClick() {
-        console.log("onSaveClick", this.state.word);
+        var {word, blacklist} = this.props;
+        var newWord = this.state.word;
+        
+        blacklist.update(word, newWord);
     }
 
     onInputChange(e) {

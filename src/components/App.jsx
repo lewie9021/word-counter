@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Navbar, Nav, NavItem, Grid, Row, Col } from "react-bootstrap";
 import Parser from "../app/Parser";
+import Blacklist from "../app/Blacklist";
 import BlacklistModal from "./Blacklist/Modal"
 import StatsBucket from "./StatsBucket";
 import TextArea from "./TextArea";
@@ -9,24 +10,20 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        
+
+        this.blacklist = new Blacklist();
         this.parser = new Parser();
+
+        this.blacklist.on("change", () => {
+            this.forceUpdate();
+        })
+        
         this.state = {
             ...this.parser.get(),
-            blacklist: this.loadBlacklist()
+            showModal: false
         };
     }
 
-    loadBlacklist() {
-        // TODO: Retrieve the list from local storage (as an array) and convert it to a map.
-        // Note: We'll need defaults for on first visit.
-        return {
-            "it": null,
-            "the": null,
-            "that": null
-        };
-    }
-        
     onTextAreaChange() {
         this.setState(this.parser.get());
     }
@@ -42,10 +39,11 @@ class App extends Component {
             showModal: false
         });
     }
-    
+
     render() {
+        var {details} = this.state;
         var brand = <a href="#/">Word Counter</a>;
-        var {details, blacklist} = this.state;
+        var blacklist = this.blacklist.get();
         var wordDensity = this.state.wordDensity.filter((word) => {
             return !(word.name in blacklist);
         });
@@ -71,7 +69,7 @@ class App extends Component {
                 <BlacklistModal
                   showModal={this.state.showModal}
                   onHide={this.onHideBlacklist.bind(this)}
-                  words={Object.keys(blacklist)}
+                  blacklist={this.blacklist}
                 />
             </div>
         );
