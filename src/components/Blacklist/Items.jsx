@@ -1,31 +1,19 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroup, ListGroupItem, Button, Input } from "react-bootstrap";
-import BlacklistItem from "./Item";
+import Item from "./Item";
+import NewItem from "./NewItem";
 
 class BlacklistItems extends Component {
 
-    onAddWordClick() {
-        var input = React.findDOMNode(this.refs.newWord).childNodes[0];
+    // TODO: Define PropTypes.
 
-        this.props.blacklist.add(input.value);
-    }
+    validate(input) {
+        var blacklist = this.props.blacklist.get();
 
-    renderAddItem() {
-        return (
-            <ListGroupItem className="clearfix create">
-                <div className="controls">
-                    <Button
-                      className="pull-right"
-                      bsStyle="success"
-                      onClick={this.onAddWordClick.bind(this)}>
-                        Add Word
-                    </Button>
-                </div>
-                <div className="content">
-                    <Input ref="newWord" type="text" />
-                </div>
-            </ListGroupItem>
-        );
+        if (!input.length || input in blacklist)
+            return "error";
+        
+        return "success"
     }
     
     render() {
@@ -34,13 +22,13 @@ class BlacklistItems extends Component {
         var items = words.map((word) => {
             // TODO: these should be ordered alphabetically.
             // TODO: Use a value for the 'key' attribute. Unbelievable!
-            return <BlacklistItem key={word} word={word} blacklist={blacklist} />;
+            return <Item key={word} word={word} blacklist={blacklist} />;
         });
         
         return (
             <ListGroup className="blacklist">
                 {items}
-                {this.renderAddItem()}
+                <NewItem blacklist={blacklist} validate={this.validate.bind(this)} />
             </ListGroup>
         );
     }
