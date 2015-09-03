@@ -4,3 +4,30 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 textarea {
     resize: vertical;
 }
+
+// TODO: Move this into a separate file.
+.blacklist {
+    margin-bottom: 0px;
+
+    .list-group-item {    
+        .content {
+            margin-right: 98px;
+
+            strong {
+                line-height: 32px;
+            }
+            
+            .form-group {
+                margin-bottom: 0px;
+            }
+        }
+        
+        .controls {
+            float: right;
+            
+            .btn {
+                margin-left: 8px;
+            }
+        }
+    }
+}
