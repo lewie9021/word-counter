@@ -4,11 +4,18 @@ import BlacklistItem from "./Item";
 
 class BlacklistItems extends Component {
 
+    onAddWordClick() {
+        console.log("onAddWordClick");
+    }
+    
     renderAddItem() {
         return (
             <ListGroupItem className="clearfix create">
                 <div className="controls">
-                    <Button className="pull-right" bsStyle="success">
+                    <Button
+                      className="pull-right"
+                      bsStyle="success"
+                      onClick={this.onAddWordClick.bind(this)}>
                         Add Word
                     </Button>
                 </div>
