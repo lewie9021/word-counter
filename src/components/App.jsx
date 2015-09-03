@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Navbar, Grid, Row, Col } from "react-bootstrap";
+import { Navbar, Nav, NavItem, Grid, Row, Col } from "react-bootstrap";
+import Parser from "../app/Parser";
+import BlacklistModal from "./Blacklist/Modal"
 import StatsBucket from "./StatsBucket";
 import TextArea from "./TextArea";
-import Parser from "../app/Parser";
 
 class App extends Component {
 
@@ -17,13 +18,29 @@ class App extends Component {
         this.setState(this.parser.get());
     }
 
+    onShowBlacklist(e) {
+        this.setState({
+            showModal: true
+        });
+    }
+
+    onHideBlacklist() {
+        this.setState({
+            showModal: false
+        });
+    }
+    
     render() {
         var brand = <a href="#/">Word Counter</a>;
         var {details, wordDensity} = this.state;
         
         return (
             <div>
-                <Navbar brand={brand} inverse />
+                <Navbar brand={brand} inverse>
+                    <Nav right>
+                        <NavItem onClick={this.onShowBlacklist.bind(this)}>Blacklisted Words</NavItem>
+                    </Nav>
+                </Navbar>
                 <Grid>
                     <Row>
                         <Col xs={12} md={8}>
@@ -35,6 +52,7 @@ class App extends Component {
                         </Col>
                     </Row>
                 </Grid>
+                <BlacklistModal showModal={this.state.showModal} onHide={this.onHideBlacklist.bind(this)} />
             </div>
         );
     }
