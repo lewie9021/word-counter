@@ -45,8 +45,10 @@ class BlacklistItem extends Component {
     }
     
     render() {
+        var {mode} = this.state;
+        
         return (
-            <ListGroupItem className="clearfix ${mode}">
+            <ListGroupItem className={`clearfix ${mode}`}>
                 <div className="controls">
                     {this.renderControls()}
                 </div>
