@@ -7,7 +7,8 @@ class BlacklistItem extends Component {
         super(props);
         
         this.state = {
-            mode: (props.mode || "view")
+            mode: (props.mode || "view"),
+            word: props.word
         };
     }
     
@@ -23,12 +24,19 @@ class BlacklistItem extends Component {
 
     onCancelClick() {
         this.setState({
-            mode: "view"
+            mode: "view",
+            word: this.props.word
         });
     }
 
     onSaveClick() {
-        console.log("onSaveClick");
+        console.log("onSaveClick", this.state.word);
+    }
+
+    onInputChange(e) {
+        this.setState({
+            word: e.target.value
+        })
     }
 
     renderControls() {
@@ -69,12 +77,14 @@ class BlacklistItem extends Component {
     }
 
     renderContent() {
-        var {word} = this.props;
-        var {mode} = this.state;
+        var {mode, word} = this.state;
         
         return ((mode == "view") ?
-            <strong>{word}</strong> :
-            <Input type="text" value={word} />
+            <strong>{this.props.word}</strong> :
+            <Input
+              type="text"
+              value={word}
+              onChange={this.onInputChange.bind(this)} />
         );
     }
     
