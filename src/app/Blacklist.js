@@ -21,23 +21,26 @@ class Blacklist extends EventEmitter {
         };
     }
     
-    add(word) {
+    add(input) {
+        var word = sanitizeInput(input);
+        
         this._blacklist[word] = null;
         this.emit("change");
     }
 
-    del(word) {
-        delete this._blacklist[word];
+    del(input) {
+        var word = sanitizeInput(input);
+        
+        delete this._blacklist[word];        
         this.emit("change");
     }
     
-    update(oldWord, newWord) {
-        console.log(oldWord, newWord);
+    update(oldInput, newInput) {
+        var oldWord = sanitizeInput(oldInput);
+        var newWord = sanitizeInput(newInput);
         
         delete this._blacklist[oldWord];
-        this._blacklist[newWord] = null;
-
-        console.log(this._blacklist);
+        this._blacklist[sanitizeInput(newWord)] = null;
         this.emit("change");
     }
 
@@ -45,6 +48,10 @@ class Blacklist extends EventEmitter {
         return this._blacklist;
     }
     
+}
+
+function sanitizeInput(input) {
+    return input.toLowerCase();
 }
 
 export default Blacklist;
