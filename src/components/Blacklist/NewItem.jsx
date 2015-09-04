@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from "react";
-import { ListGroupItem, Button, Input } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import Input from "./Input";
 
 // TODO: Fix tab indexing.
 
@@ -22,54 +23,31 @@ class NewItem extends Component {
     onAddClick() {
         var {validate, blacklist} = this.props;
         var input = this.state.word;
-        var inputStyle = validate(input);
 
-        if (inputStyle != "success")
-            return this.setState({inputStyle});
+        if (validate(input) != "success") {
+            // Find the input element within the DOM.
+            let element = React.findDOMNode(this.refs.input).childNodes[0];
+
+            // Focus on the input to alert the user.
+            return element.focus();
+        }
 
         // Reset the input.
         this.setState({
-            word: "",
-            inputStyle: null
+            word: ""
         });
 
         // Add the new word to the blacklist.
-        return blacklist.add(input);
+        blacklist.add(input);        
     }
 
     onInputChange(e) {
-        var input = e.target.value;
-        var {validate} = this.props;
-        
         this.setState({
-            word: input,
-            inputStyle: (input.length ? validate(input) : null)
+            word: e.target.value
         });
-    }
-
-    onInputFocus() {
-        var {word} = this.state;
-        var {validate} = this.props;
-        
-        this.setState({
-            inputStyle: (word.length ? validate(word) : null)
-        });
-    }
-    
-    onInputBlur(e) {
-        this.setState({
-            inputStyle: null
-        });
-    }
-
-    onKeyUp(e) {
-        if (e.which == 13)
-            this.onAddClick();
     }
     
     render() {
-        var {word, inputStyle} = this.state;
-
         return (
             <div className="word clearfix create">
                 <div className="controls">
@@ -82,15 +60,12 @@ class NewItem extends Component {
                 </div>
                 <div className="content">
                     <Input
-                      ref="newWord"
+                      ref="input"
                       type="text"
-                      value={word}
-                      bsStyle={inputStyle}
+                      value={this.state.word}
+                      validate={this.props.validate}
                       onChange={this.onInputChange.bind(this)}
-                      onFocus={this.onInputFocus.bind(this)}
-                      onBlur={this.onInputBlur.bind(this)}
-                      onKeyUp={this.onKeyUp.bind(this)}
-                      hasFeedback
+                      onEnter={this.onAddClick.bind(this)}
                     />
                 </div>
             </div>
