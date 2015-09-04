@@ -14,7 +14,7 @@ class WordInput extends Component {
         super(props);
 
         this.state = {
-            inputStyle: null
+            style: null
         };
     }
 
@@ -23,7 +23,7 @@ class WordInput extends Component {
         var {validate, onChange} = this.props;
 
         this.setState({
-            inputStyle: (input.length ? validate(input) : null)
+            style: (input.length ? validate(input) : null)
         });
 
         onChange.apply(null, arguments);
@@ -33,26 +33,31 @@ class WordInput extends Component {
         var {value, validate} = this.props;
         
         this.setState({
-            inputStyle: (value.length ? validate(value) : null)
+            style: (value.length ? validate(value) : null)
         });
     }
     
     onBlur() {
         this.setState({
-            inputStyle: null
+            style: null
         });
     }
 
     onKeyUp(e) {
-        if (e.which == 13)
-            this.props.onEnter();
+        if (e.which != 13)
+            return;
+        
+        this.props.onEnter.apply(null, arguments);
+        this.setState({
+            style: null
+        });
     }
 
     render() {
         return (
             <Input
               type="text"
-              bsStyle={this.state.inputStyle}
+              bsStyle={this.state.style}
               value={this.props.value}
               onChange={this.onChange.bind(this)}
               onFocus={this.onFocus.bind(this)}
