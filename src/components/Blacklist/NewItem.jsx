@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Input } from "react-bootstrap";
 
 // TODO: Store the input value within state to prevent the value from clearing when a re-render happens.
+// TODO: When enter is clicked, the onAddClick method is triggered.
+// TODO: Fix tab indexing.
 
 class NewItem extends Component {
 
@@ -41,7 +43,7 @@ class NewItem extends Component {
     
     render() {
         return (
-            <ListGroupItem className="clearfix create">
+            <div className="word clearfix create">
                 <div className="controls">
                     <Button
                       className="pull-right"
@@ -60,7 +62,7 @@ class NewItem extends Component {
                       hasFeedback
                     />
                 </div>
-            </ListGroupItem>
+            </div>
         );
     }
     

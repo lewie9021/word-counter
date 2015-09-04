@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon, Input } from "react-bootstrap";
 
+// TODO: Enable validation similar to the NewItem component.
+
 class BlacklistItem extends Component {
     
     constructor(props) {
@@ -41,7 +43,7 @@ class BlacklistItem extends Component {
     onInputChange(e) {
         this.setState({
             word: e.target.value
-        })
+        });
     }
 
     renderControls() {
@@ -97,7 +99,7 @@ class BlacklistItem extends Component {
         var {mode} = this.state;
         
         return (
-            <ListGroupItem className={`clearfix ${mode}`}>
+            <ListGroupItem className={`word clearfix ${mode}`}>
                 <div className="controls">
                     {this.renderControls()}
                 </div>

@@ -1,21 +1,11 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroup, ListGroupItem, Button, Input } from "react-bootstrap";
 import Item from "./Item";
-import NewItem from "./NewItem";
 
 class BlacklistItems extends Component {
 
     // TODO: Define PropTypes.
 
-    validate(input) {
-        var blacklist = this.props.blacklist.get();
-
-        if (!input.length || input in blacklist)
-            return "error";
-        
-        return "success"
-    }
-    
     render() {
         var {blacklist} = this.props;
         var words = Object.keys(blacklist.get());
@@ -26,9 +16,8 @@ class BlacklistItems extends Component {
         });
         
         return (
-            <ListGroup className="blacklist">
+            <ListGroup>
                 {items}
-                <NewItem blacklist={blacklist} validate={this.validate.bind(this)} />
             </ListGroup>
         );
     }

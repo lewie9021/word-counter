@@ -1,41 +1,46 @@
-import React, { Component } from "react";
+import React, { PropTypes, Component } from "react";
 import { Modal, Button } from "react-bootstrap";
-import BlacklistItems from "./Items";
+import Items from "./Items";
+import NewItem from "./NewItem";
 
-// TODO: Method for each section might be overkill?
-// TODO: Remove Modal.x.
 class BlacklistModal extends Component {
-    
-    header() {
-        return (
-            <Modal.Header closeButton>
-                <Modal.Title>Blacklist Words</Modal.Title>
-            </Modal.Header>
-        );
+
+    static propTypes = {
+        showModal: PropTypes.bool.isRequired,
+        blacklist: PropTypes.object.isRequired,
+        onHide: PropTypes.func.isRequired
     }
 
-    body() {
-        return (
-            <Modal.Body>
-                <BlacklistItems blacklist={this.props.blacklist} />
-            </Modal.Body>
-        );
-    }
-    
-    footer() {
-        return (
-            <Modal.Footer>
-                <Button onClick={this.props.onHide}>Close</Button>
-            </Modal.Footer>
-        );
+    validate(input) {
+        var blacklist = this.props.blacklist.get();
+
+        if (!input.length || input in blacklist)
+            return "error";
+        
+        return "success";
     }
     
     render() {
+        var {Header, Title, Body, Footer} = Modal;
+        var {showModal, onHide, blacklist} = this.props;
+        
         return (
-            <Modal show={this.props.showModal} onHide={this.props.onHide}>
-                {this.header()}
-                {this.body()}
-                {this.footer()}
+            <Modal className="blacklist" show={showModal} onHide={onHide}>
+                <Header className="clearfix">
+                    <Button className="pull-right" onClick={onHide}>
+                        Close
+                    </Button>
+                    <Title>Blacklist Words</Title>
+                </Header>
+                <Body>
+                    <Items className="words" blacklist={blacklist} />
+                </Body>
+                <Footer>
+                    <NewItem
+                      blacklist={blacklist}
+                      validate={this.validate.bind(this)}
+                    />
+                </Footer>
             </Modal>
         );
     }
