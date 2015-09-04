@@ -7,7 +7,10 @@ import { ListGroupItem, Button, Input } from "react-bootstrap";
 
 class NewItem extends Component {
 
-    // TODO: Define PropTypes.
+    static propTypes = {
+        blacklist: PropTypes.object.isRequired,
+        validate: PropTypes.func.isRequired
+    }
     
     constructor(props) {
         super(props);
@@ -19,22 +22,25 @@ class NewItem extends Component {
     
     onAddClick() {
         var input = this.refs.newWord.getValue();
+        var validateStyle = this.props.validate(input);
 
-        if (this.props.validate(input) == "error")
-            return this.setState({
-                inputStyle: "error"
-            });
-        
-        this.props.blacklist.add(input);
+        // Ensure the input is valid before attempting to add it.
+        if (validateStyle == "success")
+            return this.props.blacklist.add(input);
+
+        this.setState({
+            inputStyle: validateStyle
+        });
     }
 
     onInputChange(e) {
         this.setState({
             inputStyle: this.props.validate(e.target.value)
-        })
+        });
     }
 
     onInputBlur(e) {
+        // If the user clicks off the input as it's empty, clear the validation styling.
         if (!e.target.length)
             this.setState({
                 inputStyle: null
