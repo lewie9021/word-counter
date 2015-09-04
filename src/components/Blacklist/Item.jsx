@@ -66,8 +66,16 @@ class Item extends Component {
     onSaveClick() {
         var {blacklist, word} = this.props;
         var newWord = this.state.word;
+        var element;
 
-        blacklist.update(word, newWord);
+        if (this.validate(newWord) == "success")
+            return blacklist.update(word, newWord);
+
+        // Find the input element within the DOM.
+        element = React.findDOMNode(this.refs.input).childNodes[0];
+
+        // Focus on the input to alert the user.
+        element.focus();
     }
 
     renderControls() {
@@ -97,6 +105,7 @@ class Item extends Component {
             <strong>{word}</strong> :
             <Input
               type="text"
+              ref="input"
               value={this.state.word}
               validate={this.validate.bind(this)}
               onChange={this.onInputChange.bind(this)}
