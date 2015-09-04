@@ -2,9 +2,14 @@ import React, { PropTypes, Component } from "react";
 import { ListGroup, ListGroupItem, Button, Input } from "react-bootstrap";
 import Item from "./Item";
 
+// TODO: Move this logic into Modal?
+
 class BlacklistItems extends Component {
 
-    // TODO: Define PropTypes.
+    static propTypes = {
+        blacklist: PropTypes.object.isRequired,
+        validate: PropTypes.func.isRequired
+    }
 
     render() {
         var {blacklist} = this.props;
@@ -16,7 +21,7 @@ class BlacklistItems extends Component {
         });
         
         return (
-            <ListGroup>
+            <ListGroup className="words">
                 {items}
             </ListGroup>
         );
