@@ -33,10 +33,7 @@ class BlacklistModal extends Component {
                     <Title>Blacklist Words</Title>
                 </Header>
                 <Body>
-                    <Items
-                      blacklist={blacklist}
-                      validate={this.validate.bind(this)}
-                    />
+                    <Items blacklist={blacklist} />
                 </Body>
                 <Footer>
                     <NewItem

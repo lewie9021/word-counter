@@ -2,8 +2,7 @@ import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon } from "react-bootstrap";
 import Input from "./Input";
 
-// TODO: Enable validation similar to the NewItem component.
-// Tip: When validating, we should allow saving the value that matches this.props.word.
+// TODO: When the edit button is clicked, auto focus on the input.
 
 const CONTROLS = {
     view: [
@@ -20,11 +19,10 @@ class Item extends Component {
 
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
-        validate: PropTypes.func.isRequired,
         onEdit: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         word: PropTypes.string.isRequired,
-        mode: PropTypes.string
+        mode: PropTypes.string.isRequired
     }
     
     constructor(props) {
@@ -42,6 +40,17 @@ class Item extends Component {
         this.setState({mode, word});
     }
 
+    validate(input) {
+        var {blacklist, word} = this.props;
+        // If the word matches the old value, still class it as valid.
+        var duplicate = (input != word && input in blacklist.get());
+        
+        if (input.length && !duplicate)
+            return "success";
+        
+        return "error";
+    }
+    
     onInputChange(e) {
         this.setState({
             word: e.target.value
@@ -89,8 +98,9 @@ class Item extends Component {
             <Input
               type="text"
               value={this.state.word}
-              validate={validate}
+              validate={this.validate.bind(this)}
               onChange={this.onInputChange.bind(this)}
+              onEnter={this.onSaveClick.bind(this)}
             />
         );
     }

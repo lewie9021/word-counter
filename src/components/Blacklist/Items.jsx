@@ -6,13 +6,12 @@ class Items extends Component {
 
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
-        validate: PropTypes.func.isRequired
     }
 
     constructor(props) {
         super(props);
 
-        this.props.blacklist.on("change", this.onCancel.bind(this));
+        props.blacklist.on("change", this.onCancel.bind(this));
         
         this.state = {
             // Contains the word that's being edited.
@@ -33,7 +32,7 @@ class Items extends Component {
     }
 
     renderItems() {
-        var {blacklist, validate} = this.props;
+        var {blacklist} = this.props;
         var words = Object.keys(blacklist.get()).sort();
 
         return words.map((word, index) => {
@@ -45,7 +44,6 @@ class Items extends Component {
                   word={word}
                   mode={mode}
                   blacklist={blacklist}
-                  validate={validate}
                   onEdit={this.onEdit.bind(this, word)}
                   onCancel={this.onCancel.bind(this)}
                 />
