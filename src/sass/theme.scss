@@ -7,9 +7,11 @@ textarea {
 
 // TODO: Move this into a separate file.
 .blacklist {
-    margin-bottom: 0px;
+    .words {
+        margin-bottom: 0px;
+    }
 
-    .list-group-item {    
+    .word {    
         .content {
             margin-right: 98px;
 
