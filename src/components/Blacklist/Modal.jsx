@@ -27,7 +27,7 @@ class BlacklistModal extends Component {
         return (
             <Modal className="blacklist" show={showModal} onHide={onHide}>
                 <Header className="clearfix">
-                    <Button className="pull-right" onClick={onHide}>
+                    <Button className="pull-right" bsSize="small" onClick={onHide}>
                         Close
                     </Button>
                     <Title>Blacklist Words</Title>
