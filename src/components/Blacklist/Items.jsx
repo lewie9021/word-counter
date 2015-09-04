@@ -1,10 +1,11 @@
 import React, { PropTypes, Component } from "react";
-import { ListGroup, ListGroupItem, Button, Input } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import Item from "./Item";
 
-// TODO: Move this logic into Modal?
+// TODO: Enforce only one item to be edited at once.
+// Hint: make use of the mode property to control this. 
 
-class BlacklistItems extends Component {
+class Items extends Component {
 
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
@@ -12,12 +13,18 @@ class BlacklistItems extends Component {
     }
 
     render() {
-        var {blacklist} = this.props;
+        var {blacklist, validate} = this.props;
         var words = Object.keys(blacklist.get());
         var items = words.map((word) => {
             // TODO: these should be ordered alphabetically.
             // TODO: Use a value for the 'key' attribute. Unbelievable!
-            return <Item key={word} word={word} blacklist={blacklist} />;
+            return (
+                <Item
+                  key={word}
+                  word={word}
+                  blacklist={blacklist}
+                  validate={validate}
+                />);
         });
         
         return (
@@ -29,4 +36,4 @@ class BlacklistItems extends Component {
     
 }     
 
-export default BlacklistItems;
+export default Items;

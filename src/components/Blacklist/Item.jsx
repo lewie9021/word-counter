@@ -3,7 +3,14 @@ import { ListGroupItem, Button, Glyphicon, Input } from "react-bootstrap";
 
 // TODO: Enable validation similar to the NewItem component.
 
-class BlacklistItem extends Component {
+class Item extends Component {
+
+    static propTypes = {
+        blacklist: PropTypes.object.isRequired,
+        validate: PropTypes.func.isRequired,
+        word: PropTypes.string.isRequired,
+        mode: PropTypes.string
+    }
     
     constructor(props) {
         super(props);
@@ -112,4 +119,4 @@ class BlacklistItem extends Component {
     
 }     
 
-export default BlacklistItem;
+export default Item;
