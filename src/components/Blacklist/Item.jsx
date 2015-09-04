@@ -2,12 +2,10 @@ import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon } from "react-bootstrap";
 import Input from "./Input";
 
-// TODO: When the edit button is clicked, auto focus on the input.
-
 const CONTROLS = {
     view: [
         {style: "danger", icon: "trash", method: "onRemoveClick"},
-        {style: "info", icon: "pencil", method: "onEdit"}
+        {style: "info", icon: "pencil", method: "onEditClick"}
     ],
     edit: [
         {style: "danger", icon: "remove", method: "onCancel"},
@@ -50,6 +48,14 @@ class Item extends Component {
         
         return "error";
     }
+
+    focusInput() {
+        // Find the input element within the DOM.
+        var input = React.findDOMNode(this.refs.input).childNodes[0];
+
+        // Focus on the input to alert the user.
+        input.focus();
+    }
     
     onInputChange(e) {
         this.setState({
@@ -57,6 +63,12 @@ class Item extends Component {
         });
     }
 
+    onEditClick() {
+        this.props.onEdit(() => {
+            this.focusInput();
+        });
+    }
+    
     onRemoveClick() {
         var {blacklist, word} = this.props;
         
@@ -66,16 +78,11 @@ class Item extends Component {
     onSaveClick() {
         var {blacklist, word} = this.props;
         var newWord = this.state.word;
-        var element;
 
         if (this.validate(newWord) == "success")
             return blacklist.update(word, newWord);
 
-        // Find the input element within the DOM.
-        element = React.findDOMNode(this.refs.input).childNodes[0];
-
-        // Focus on the input to alert the user.
-        element.focus();
+        this.focusInput();
     }
 
     renderControls() {

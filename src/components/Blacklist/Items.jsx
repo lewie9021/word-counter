@@ -19,10 +19,10 @@ class Items extends Component {
         }
     }
 
-    onEdit(word) {
+    onEdit(word, callback) {
         this.setState({
             editing: word
-        });
+        }, callback);
     }
 
     onCancel() {
