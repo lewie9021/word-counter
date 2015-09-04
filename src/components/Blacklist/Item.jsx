@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from "react";
-import { ListGroupItem, Button, Glyphicon, Input } from "react-bootstrap";
+import { ListGroupItem, Button, Glyphicon } from "react-bootstrap";
+import Input from "./Input";
 
 // TODO: Enable validation similar to the NewItem component.
 // Tip: When validating, we should allow saving the value that matches this.props.word.
@@ -81,13 +82,14 @@ class Item extends Component {
     }
 
     renderContent() {
-        var {mode, word} = this.props;
+        var {mode, word, validate} = this.props;
         
         return ((mode == "view") ?
             <strong>{word}</strong> :
             <Input
               type="text"
               value={this.state.word}
+              validate={validate}
               onChange={this.onInputChange.bind(this)}
             />
         );
