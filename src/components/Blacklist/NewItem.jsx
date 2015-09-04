@@ -21,6 +21,7 @@ class NewItem extends Component {
     }
     
     onAddClick() {
+        // TODO: Clear value if valid.
         var input = this.refs.newWord.getValue();
         var validateStyle = this.props.validate(input);
 
