@@ -9,6 +9,9 @@ class StatsBucket extends Component {
     }
     
     renderStats() {
+        // Map over each stat object and return a list item element.
+        // Note: We use a 'key' property to help React identify a stat easier during reconciliation.
+        // TODO: This is currently problematic as the order of the array is ultimately a result of Object.keys().
         return this.props.stats.map((stat, index) => {
             return (
                 <ListGroupItem key={index}>
@@ -20,11 +23,11 @@ class StatsBucket extends Component {
     }
     
     render() {
-        var stats = this.renderStats();
-        
         return (
             <Panel header={this.props.title} bsStyle="info">
-                <ListGroup fill>{stats}</ListGroup>
+                <ListGroup fill>
+                    {this.renderStats()}
+                </ListGroup>
             </Panel>
         );
     }

@@ -3,15 +3,12 @@ import React, { PropTypes, Component } from "react";
 class TextArea extends Component {
     
     static propTypes = {
-        onChange: PropTypes.func.isRequired,
-        parser: PropTypes.object.isRequired
+        onChange: PropTypes.func.isRequired
     }
 
     onChange(e) {
-        var {parser, onChange} = this.props;
-
-        parser.process(e.target.value);
-        onChange();
+        // Inform the App component about the change.
+        this.props.onChange(e.target.value);
     }
     
     render() {

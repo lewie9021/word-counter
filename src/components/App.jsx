@@ -11,20 +11,28 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        // Instantiate a Blacklist to maintain words we don't want to see in the word density bucket.
         this.blacklist = new Blacklist();
+        
+        // Create an instance of Parser to deal with input changes from the TextArea component.
         this.parser = new Parser();
 
+        // When words are added, modified, or removed, we must re-render.
         this.blacklist.on("change", () => {
             this.forceUpdate();
-        })
+        });
         
         this.state = {
+            // Provides the properties 'details' and 'wordDensity'.
             ...this.parser.get(),
             showModal: false
         };
     }
 
-    onTextAreaChange() {
+    onTextAreaChange(inputValue) {
+        this.parser.process(inputValue);
+
+        // Update state to trigger a re-render.
         this.setState(this.parser.get());
     }
 
@@ -44,6 +52,7 @@ class App extends Component {
         var {details} = this.state;
         var brand = <a href="#/">Word Counter</a>;
         var blacklist = this.blacklist.get();
+        // Filter out words that have been blacklisted.
         var wordDensity = this.state.wordDensity.filter((word) => {
             return !(word.name in blacklist);
         });
@@ -52,16 +61,19 @@ class App extends Component {
             <div>
                 <Navbar brand={brand} inverse>
                     <Nav right>
-                        <NavItem onClick={this.onShowBlacklist.bind(this)}>Blacklisted Words</NavItem>
+                        <NavItem onClick={this.onShowBlacklist.bind(this)}>
+                            Blacklisted Words
+                        </NavItem>
                     </Nav>
                 </Navbar>
                 <Grid>
                     <Row>
                         <Col xs={12} md={8}>
-                            <TextArea parser={this.parser} onChange={this.onTextAreaChange.bind(this)} />
+                            <TextArea onChange={this.onTextAreaChange.bind(this)} />
                         </Col>
                         <Col xs={12} md={4}>
                             <StatsBucket title="Details" stats={details} />
+                            {/* Only show the word density bucket when there are words to show. */}
                             {wordDensity.length ? <StatsBucket title="Word Density" stats={wordDensity} /> : null}
                         </Col>
                     </Row>
