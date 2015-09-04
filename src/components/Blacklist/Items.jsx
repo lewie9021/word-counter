@@ -15,7 +15,7 @@ class Items extends Component {
         this.props.blacklist.on("change", this.onCancel.bind(this));
         
         this.state = {
-            // Word / key that's being edited.
+            // Contains the word that's being edited.
             editing: null
         }
     }
@@ -31,33 +31,35 @@ class Items extends Component {
             editing: null
         });
     }
-    
-    render() {
+
+    renderItems() {
         var {blacklist, validate} = this.props;
-        var words = Object.keys(blacklist.get());
-        var items = words.map((word) => {
+        var words = Object.keys(blacklist.get()).sort();
+
+        return words.map((word, index) => {
             var mode = ((word == this.state.editing) ? "edit" : "view");
-            // TODO: These should be ordered alphabetically.
-            // TODO: Use a better value for the 'key' attribute. Unbelievable!
+            
             return (
                 <Item
-                  key={word}
+                  key={index}
                   word={word}
                   mode={mode}
                   blacklist={blacklist}
                   validate={validate}
                   onEdit={this.onEdit.bind(this, word)}
                   onCancel={this.onCancel.bind(this)}
-                />);
+                />
+            );
         });
-        
+    }
+    
+    render() {
         return (
             <ListGroup className="words">
-                {items}
+                {this.renderItems()}
             </ListGroup>
         );
     }
     
-}     
-
+}
 export default Items;
