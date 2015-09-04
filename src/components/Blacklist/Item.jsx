@@ -2,6 +2,18 @@ import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon, Input } from "react-bootstrap";
 
 // TODO: Enable validation similar to the NewItem component.
+// Tip: When validating, we should allow saving the value that matches this.props.word.
+
+const CONTROLS = {
+    view: [
+        {style: "danger", icon: "trash", method: "onRemoveClick"},
+        {style: "info", icon: "pencil", method: "onEditClick"}
+    ],
+    edit: [
+        {style: "danger", icon: "remove", method: "onCancelClick"},
+        {style: "success", icon: "ok", method: "onSaveClick"}
+    ]
+};
 
 class Item extends Component {
 
@@ -17,6 +29,7 @@ class Item extends Component {
         
         this.state = {
             mode: (props.mode || "view"),
+            // Contains the inline edit value.
             word: props.word
         };
     }
@@ -54,40 +67,22 @@ class Item extends Component {
     }
 
     renderControls() {
-        var {mode} = this.state;
+        var controls = CONTROLS[this.state.mode];
 
-        switch(mode) {
-            case "view":
-                return [
-                    <Button
-                      className="pull-right"
-                      bsStyle="danger"
-                      onClick={this.onRemoveClick.bind(this)}>
-                        <Glyphicon glyph="trash" />
-                    </Button>,
-                    <Button
-                      className="pull-right"
-                      bsStyle="info"
-                      onClick={this.onEditClick.bind(this)}>
-                        <Glyphicon glyph="pencil" />
-                    </Button>
-                ];
-            case "edit":
-                return [
-                    <Button
-                      className="pull-right"
-                      bsStyle="danger"
-                      onClick={this.onCancelClick.bind(this)}>
-                        <Glyphicon glyph="remove" />
-                    </Button>,
-                    <Button
-                      className="pull-right"
-                      bsStyle="success"
-                      onClick={this.onSaveClick.bind(this)}>
-                        <Glyphicon glyph="ok" />
-                    </Button>
-                ];
-        }
+        // Map over the controls of the given mode.
+        return controls.map((control, index) => {
+            var {style, icon, method} = control;
+            
+            return (
+                <Button
+                  key={index}
+                  className="pull-right"
+                  bsStyle={style}
+                  onClick={this[method].bind(this)}>
+                    <Glyphicon glyph={icon} />
+                </Button>
+            );
+        });
     }
 
     renderContent() {

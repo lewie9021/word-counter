@@ -17,7 +17,7 @@ class Items extends Component {
         var words = Object.keys(blacklist.get());
         var items = words.map((word) => {
             // TODO: these should be ordered alphabetically.
-            // TODO: Use a value for the 'key' attribute. Unbelievable!
+            // TODO: Use a better value for the 'key' attribute. Unbelievable!
             return (
                 <Item
                   key={word}
