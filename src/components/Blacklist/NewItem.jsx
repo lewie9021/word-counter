@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Input } from "react-bootstrap";
 
-// TODO: Store the input value within state to prevent the value from clearing when a re-render happens.
-// TODO: When enter is clicked, the onAddClick method is triggered.
 // TODO: Fix tab indexing.
 
 class NewItem extends Component {
@@ -16,39 +14,62 @@ class NewItem extends Component {
         super(props);
 
         this.state = {
+            word: "",
             inputStyle: null
         };
     }
     
     onAddClick() {
-        // TODO: Clear value if valid.
-        var input = this.refs.newWord.getValue();
-        var validateStyle = this.props.validate(input);
+        var {validate, blacklist} = this.props;
+        var input = this.state.word;
+        var inputStyle = validate(input);
 
-        // Ensure the input is valid before attempting to add it.
-        if (validateStyle == "success")
-            return this.props.blacklist.add(input);
+        if (inputStyle != "success")
+            return this.setState({inputStyle});
 
+        // Reset the input.
         this.setState({
-            inputStyle: validateStyle
+            word: "",
+            inputStyle: null
         });
+
+        // Add the new word to the blacklist.
+        return blacklist.add(input);
     }
 
     onInputChange(e) {
+        var input = e.target.value;
+        var {validate} = this.props;
+        
         this.setState({
-            inputStyle: this.props.validate(e.target.value)
+            word: input,
+            inputStyle: (input.length ? validate(input) : null)
         });
     }
 
+    onInputFocus() {
+        var {word} = this.state;
+        var {validate} = this.props;
+        
+        this.setState({
+            inputStyle: (word.length ? validate(word) : null)
+        });
+    }
+    
     onInputBlur(e) {
-        // If the user clicks off the input as it's empty, clear the validation styling.
-        if (!e.target.length)
-            this.setState({
-                inputStyle: null
-            });
+        this.setState({
+            inputStyle: null
+        });
+    }
+
+    onKeyUp(e) {
+        if (e.which == 13)
+            this.onAddClick();
     }
     
     render() {
+        var {word, inputStyle} = this.state;
+
         return (
             <div className="word clearfix create">
                 <div className="controls">
@@ -63,9 +84,12 @@ class NewItem extends Component {
                     <Input
                       ref="newWord"
                       type="text"
-                      bsStyle={this.state.inputStyle}
+                      value={word}
+                      bsStyle={inputStyle}
                       onChange={this.onInputChange.bind(this)}
+                      onFocus={this.onInputFocus.bind(this)}
                       onBlur={this.onInputBlur.bind(this)}
+                      onKeyUp={this.onKeyUp.bind(this)}
                       hasFeedback
                     />
                 </div>
