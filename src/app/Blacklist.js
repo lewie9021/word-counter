@@ -42,10 +42,15 @@ class Blacklist extends EventEmitter {
     }
 
     validate(oldInput, input) {
+        // Used when editing inline.
         var identical = (oldInput && input == oldInput);
+        // Doesn't already exist in the blacklist.
         var duplicate = (!identical && input in this.get());
-        
-        if (input.length && !duplicate)
+        // Ensure the string only contains letters.
+        var match = input.match(/[A-Z]+/i);
+
+        // Not an empty string, doesn't already exist, and only contains letters.
+        if (input.length && !duplicate && (match && match[0] == input))
             return "success";
         
         return "error";
