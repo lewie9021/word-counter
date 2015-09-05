@@ -20,6 +20,14 @@ function extractTextResolver(config) {
     return config;
 }
 
+function exposeResolver(config, name) {
+    config.loader = (name + "?" + config.variables.join("!"));
+
+    delete config.variables;
+    
+    return config;
+}
+
 module.exports = (function() {
     var config = new WebpackConfig();
     var rootPath = Path.join(__dirname, "..", "..");
@@ -72,6 +80,11 @@ module.exports = (function() {
             }
         }]
     }, extractTextResolver);
+
+    config.loader("expose", {
+        test: require.resolve("react"),
+        variables: ["React"]
+    }, exposeResolver);
 
     // Extract any CSS from bundle.js into a separate file (style.css).
     config.plugin("extract-text", ExtractTextPlugin, ["style.css"]);
