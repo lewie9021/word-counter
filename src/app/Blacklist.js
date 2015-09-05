@@ -5,6 +5,8 @@ class Blacklist extends EventEmitter {
     constructor(blacklist) {
         super();
         
+        this._blacklist = {};
+
         this._blacklist = this.load();
     }
 
@@ -19,7 +21,9 @@ class Blacklist extends EventEmitter {
 
         // Convert the array of words into an map.
         return words.reduce((blacklist, word) => {
-            blacklist[word] = null;
+            // Ensure the word is valid.
+            if (this.validate(null, word))
+                blacklist[word] = null;
             
             return blacklist;
         }, {});
