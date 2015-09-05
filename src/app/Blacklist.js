@@ -9,15 +9,22 @@ class Blacklist extends EventEmitter {
     }
 
     load() {
-        // TODO: Retrieve the list from local storage (as an array) and convert it to a map.
-        // Note: We'll need defaults for on first visit.
-        return {
-            "it": null,
-            "the": null,
-            "that": null
-        };
+        var words = localStorage.getItem("blacklist");
+        var blacklist = {};
+
+        if (!words)
+            return blacklist;
+        
+        words = JSON.parse(words);
+
+        // Convert the array of words into an map.
+        return words.reduce((blacklist, word) => {
+            blacklist[word] = null;
+            
+            return blacklist;
+        }, {});
     }
-    
+
     add(input) {
         var word = sanitizeInput(input);
         
