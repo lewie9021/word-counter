@@ -5,10 +5,7 @@ class Blacklist extends EventEmitter {
     constructor(blacklist) {
         super();
         
-        this._blacklist = {
-            ...this.load(),
-            blacklist
-        };
+        this._blacklist = this.load();
     }
 
     load() {
@@ -44,6 +41,16 @@ class Blacklist extends EventEmitter {
         this.emit("change");
     }
 
+    validate(oldInput, input) {
+        var identical = (oldInput && input == oldInput);
+        var duplicate = (!identical && input in this.get());
+        
+        if (input.length && !duplicate)
+            return "success";
+        
+        return "error";
+    }
+    
     get() {
         return this._blacklist;
     }

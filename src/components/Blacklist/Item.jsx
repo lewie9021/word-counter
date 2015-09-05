@@ -38,17 +38,6 @@ class Item extends Component {
         this.setState({mode, word});
     }
 
-    validate(input) {
-        var {blacklist, word} = this.props;
-        // If the word matches the old value, still class it as valid.
-        var duplicate = (input != word && input in blacklist.get());
-        
-        if (input.length && !duplicate)
-            return "success";
-        
-        return "error";
-    }
-
     focusInput() {
         // Find the input element within the DOM.
         var input = React.findDOMNode(this.refs.input).childNodes[0];
@@ -78,8 +67,8 @@ class Item extends Component {
     onSaveClick() {
         var {blacklist, word} = this.props;
         var newWord = this.state.word;
-
-        if (this.validate(newWord) == "success")
+        
+        if (blacklist.validate(word, newWord) == "success")
             return blacklist.update(word, newWord);
 
         this.focusInput();
@@ -106,7 +95,8 @@ class Item extends Component {
     }
 
     renderContent() {
-        var {mode, word, validate} = this.props;
+        var {mode, word, blacklist} = this.props;
+        var {validate} = blacklist;
         
         return ((mode == "view") ?
             <strong>{word}</strong> :
@@ -114,7 +104,7 @@ class Item extends Component {
               type="text"
               ref="input"
               value={this.state.word}
-              validate={this.validate.bind(this)}
+              validate={validate.bind(blacklist, word)}
               onChange={this.onInputChange.bind(this)}
               onEnter={this.onSaveClick.bind(this)}
             />

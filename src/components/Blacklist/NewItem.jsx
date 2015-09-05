@@ -7,8 +7,7 @@ import Input from "./Input";
 class NewItem extends Component {
 
     static propTypes = {
-        blacklist: PropTypes.object.isRequired,
-        validate: PropTypes.func.isRequired
+        blacklist: PropTypes.object.isRequired
     }
     
     constructor(props) {
@@ -48,6 +47,9 @@ class NewItem extends Component {
     }
     
     render() {
+        var {blacklist} = this.props;
+        var {validate} = blacklist;
+        
         return (
             <div className="word clearfix create">
                 <div className="controls">
@@ -63,7 +65,7 @@ class NewItem extends Component {
                       ref="input"
                       type="text"
                       value={this.state.word}
-                      validate={this.props.validate}
+                      validate={validate.bind(blacklist, null)}
                       onChange={this.onInputChange.bind(this)}
                       onEnter={this.onAddClick.bind(this)}
                     />

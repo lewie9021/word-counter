@@ -4,7 +4,6 @@ import Parser from "../app/Parser";
 import Blacklist from "../app/Blacklist";
 import BlacklistModal from "./Blacklist/Modal"
 import StatsBucket from "./StatsBucket";
-import TextArea from "./TextArea";
 
 class App extends Component {
 

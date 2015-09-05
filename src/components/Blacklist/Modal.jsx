@@ -10,15 +10,6 @@ class BlacklistModal extends Component {
         blacklist: PropTypes.object.isRequired,
         onHide: PropTypes.func.isRequired
     }
-
-    validate(input) {
-        var blacklist = this.props.blacklist.get();
-
-        if (!input.length || input in blacklist)
-            return "error";
-        
-        return "success";
-    }
     
     render() {
         var {Header, Title, Body, Footer} = Modal;
@@ -36,10 +27,7 @@ class BlacklistModal extends Component {
                     <Items blacklist={blacklist} />
                 </Body>
                 <Footer>
-                    <NewItem
-                      blacklist={blacklist}
-                      validate={this.validate.bind(this)}
-                    />
+                    <NewItem blacklist={blacklist} />
                 </Footer>
             </Modal>
         );
