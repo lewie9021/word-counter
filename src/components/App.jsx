@@ -29,8 +29,8 @@ class App extends Component {
         };
     }
 
-    onTextAreaChange(inputValue) {
-        this.parser.process(inputValue);
+    onTextAreaChange(e) {
+        this.parser.process(e.target.value);
 
         // Update state to trigger a re-render.
         this.setState(this.parser.get());
@@ -69,7 +69,11 @@ class App extends Component {
                 <Grid>
                     <Row>
                         <Col xs={12} md={8}>
-                            <TextArea onChange={this.onTextAreaChange.bind(this)} />
+                            <textarea
+                              className="form-control"
+                              rows="10"
+                              placeholder="Enter text here..."
+                              onChange={this.onTextAreaChange.bind(this)} />
                         </Col>
                         <Col xs={12} md={4}>
                             <StatsBucket title="Details" stats={details} />
