@@ -48,9 +48,6 @@ class WordInput extends Component {
             return;
         
         this.props.onEnter.apply(null, arguments);
-        this.setState({
-            style: null
-        });
     }
 
     render() {
