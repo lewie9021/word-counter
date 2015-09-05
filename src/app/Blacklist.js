@@ -4,9 +4,13 @@ class Blacklist extends EventEmitter {
 
     constructor(blacklist) {
         super();
-        
+
         this._blacklist = {};
 
+        this.on("change", () => {
+            this.save();
+        });
+        
         this._blacklist = this.load();
     }
 
@@ -27,6 +31,12 @@ class Blacklist extends EventEmitter {
             
             return blacklist;
         }, {});
+    }
+
+    save() {
+        var words = Object.keys(this._blacklist);
+        
+        localStorage.setItem("blacklist", JSON.stringify(words));
     }
 
     add(input) {
