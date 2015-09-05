@@ -20,10 +20,10 @@ class NewItem extends Component {
     }
     
     onAddClick() {
-        var {validate, blacklist} = this.props;
+        var {blacklist} = this.props;
         var input = this.state.word;
 
-        if (validate(input) != "success") {
+        if (blacklist.validate(null, input) != "success") {
             // Find the input element within the DOM.
             let element = React.findDOMNode(this.refs.input).childNodes[0];
 
