@@ -1,7 +1,8 @@
 var Commander  = require("commander");
 var Webpack = require("webpack");
+var WebpackDevServer = require("webpack-dev-server");
 
-var compiler, config;
+var compiler, config, server;
 
 // Called once Webpack has done its thing.
 // Note: This can be executed multiple times.
@@ -27,12 +28,17 @@ Commander
 // Require the given mode (fallbacks on the dev config).
 config = require("./config/" + (Commander.mode || "dev") + "/webpack.config");
 compiler = Webpack(config);
-
+    
 // Check if we have directly passed a watch option or defined it within the configuration object.
 if (Commander.watch || config.watch) {
-    compiler.watch({
-        aggregateTimeout: 300
-    }, onBundled);
+    if (config.devServer) {
+        server = new WebpackDevServer(compiler, config.devServer);
+        server.listen(config.devServer.port, config.devServer.host);
+    } else {
+        compiler.watch({
+            aggregateTimeout: 300
+        }, onBundled);
+    }
 } else {
     compiler.run(onBundled);
 }

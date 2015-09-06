@@ -31,14 +31,28 @@ function exposeResolver(config, name) {
 module.exports = (function() {
     var config = new WebpackConfig();
     var rootPath = Path.join(__dirname, "..", "..");
+    var outputPath = Path.join(rootPath, "dist", "dev");
 
     // Define general configuration.
     config.merge({
         entry: Path.join(__dirname, "app.entry.js"),
         output: {
-            path: Path.join(rootPath, "dist", "dev"),
+            path: outputPath,
             filename: "bundle.js"
         },
+
+        // Webpack Dev Server configuration.
+        devServer: {
+            port: 8080,
+            host: "localhost",
+            contentBase: outputPath,
+            inline: true,
+            stats: {
+                chunkModules: false,
+                colors: true
+            }
+        },
+        
         resolve: {
             extensions: ["", ".js", ".jsx", ".scss", ".css"]
         },
