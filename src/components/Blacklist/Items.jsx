@@ -11,7 +11,7 @@ class Items extends Component {
     constructor(props) {
         super(props);
 
-        props.blacklist.on("change", this.onCancel.bind(this));
+        props.blacklist.on("change", this._onCancel);
         
         this.state = {
             // Contains the word that's being edited.
@@ -19,19 +19,19 @@ class Items extends Component {
         }
     }
 
-    onEdit(word, callback) {
+    _onEdit = (word, callback) => {
         this.setState({
             editing: word
         }, callback);
     }
 
-    onCancel() {
+    _onCancel = () => {
         this.setState({
             editing: null
         });
     }
 
-    renderItems() {
+    _renderItems = () => {
         var {blacklist} = this.props;
         var words = Object.keys(blacklist.get()).sort();
 
@@ -44,8 +44,8 @@ class Items extends Component {
                   word={word}
                   mode={mode}
                   blacklist={blacklist}
-                  onEdit={this.onEdit.bind(this, word)}
-                  onCancel={this.onCancel.bind(this)}
+                  onEdit={this._onEdit.bind(this, word)}
+                  onCancel={this._onCancel}
                 />
             );
         });
@@ -54,7 +54,7 @@ class Items extends Component {
     render() {
         return (
             <ListGroup className="words">
-                {this.renderItems()}
+                {this._renderItems()}
             </ListGroup>
         );
     }

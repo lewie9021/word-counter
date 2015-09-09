@@ -28,20 +28,20 @@ class App extends Component {
         };
     }
 
-    onTextAreaChange(e) {
+    _onTextAreaChange = (e) => {
         this.parser.process(e.target.value);
 
         // Update state to trigger a re-render.
         this.setState(this.parser.get());
     }
 
-    onShowBlacklist(e) {
+    _onShowBlacklist = (e) => {
         this.setState({
             showModal: true
         });
     }
 
-    onHideBlacklist() {
+    _onHideBlacklist = () => {
         this.setState({
             showModal: false
         });
@@ -60,7 +60,7 @@ class App extends Component {
             <div>
                 <Navbar brand={brand} inverse>
                     <Nav right>
-                        <NavItem onClick={this.onShowBlacklist.bind(this)}>
+                        <NavItem onClick={this._onShowBlacklist}>
                             Blacklisted Words
                         </NavItem>
                     </Nav>
@@ -72,7 +72,7 @@ class App extends Component {
                               className="form-control"
                               rows="10"
                               placeholder="Enter text here..."
-                              onChange={this.onTextAreaChange.bind(this)} />
+                              onChange={this._onTextAreaChange} />
                         </Col>
                         <Col xs={12} md={4}>
                             <StatsBucket title="Details" stats={details} />
@@ -83,7 +83,7 @@ class App extends Component {
                 </Grid>
                 <BlacklistModal
                   showModal={this.state.showModal}
-                  onHide={this.onHideBlacklist.bind(this)}
+                  onHide={this._onHideBlacklist}
                   blacklist={this.blacklist}
                 />
             </div>

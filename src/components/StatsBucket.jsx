@@ -8,7 +8,7 @@ class StatsBucket extends Component {
         stats: PropTypes.array.isRequired
     }
     
-    renderStats() {
+    _renderStats = () => {
         // Map over each stat object and return a list item element.
         // Note: We use a 'key' property to help React identify a stat easier during reconciliation.
         // TODO: This is currently problematic as the order of the array is ultimately a result of Object.keys().
@@ -26,7 +26,7 @@ class StatsBucket extends Component {
         return (
             <Panel header={this.props.title} bsStyle="info">
                 <ListGroup fill>
-                    {this.renderStats()}
+                    {this._renderStats()}
                 </ListGroup>
             </Panel>
         );

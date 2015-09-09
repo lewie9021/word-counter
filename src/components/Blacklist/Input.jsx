@@ -18,7 +18,7 @@ class WordInput extends Component {
         };
     }
 
-    onChange(e) {
+    _onChange = (e) => {
         var input = e.target.value;
         var {validate, onChange} = this.props;
 
@@ -26,10 +26,13 @@ class WordInput extends Component {
             style: (input.length ? validate(input) : null)
         });
 
-        onChange.apply(null, arguments);
+        // Apparently this doesn't work. 'arguments' isn't the value you would expect.
+        // onChange.apply(null, arguments);
+        
+        onChange(e);
     }
 
-    onFocus() {
+    _onFocus = () => {
         var {value, validate} = this.props;
         
         this.setState({
@@ -37,13 +40,13 @@ class WordInput extends Component {
         });
     }
     
-    onBlur() {
+    _onBlur = () => {
         this.setState({
             style: null
         });
     }
 
-    onKeyUp(e) {
+    _onKeyUp = (e) => {
         if (e.which != 13)
             return;
         
@@ -56,10 +59,10 @@ class WordInput extends Component {
               type="text"
               bsStyle={this.state.style}
               value={this.props.value}
-              onChange={this.onChange.bind(this)}
-              onFocus={this.onFocus.bind(this)}
-              onBlur={this.onBlur.bind(this)}
-              onKeyUp={this.onKeyUp.bind(this)}
+              onChange={this._onChange}
+              onFocus={this._onFocus}
+              onBlur={this._onBlur}
+              onKeyUp={this._onKeyUp}
               hasFeedback
             />
         );

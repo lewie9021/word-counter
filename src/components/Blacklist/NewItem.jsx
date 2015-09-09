@@ -19,7 +19,7 @@ class NewItem extends Component {
         };
     }
     
-    onAddClick() {
+    _onAddClick = () => {
         var {blacklist} = this.props;
         var input = this.state.word;
 
@@ -40,7 +40,7 @@ class NewItem extends Component {
         blacklist.add(input);        
     }
 
-    onInputChange(e) {
+    _onInputChange = (e) => {
         this.setState({
             word: e.target.value
         });
@@ -56,7 +56,7 @@ class NewItem extends Component {
                     <Button
                       className="pull-right"
                       bsStyle="success"
-                      onClick={this.onAddClick.bind(this)}>
+                      onClick={this._onAddClick}>
                         Add Word
                     </Button>
                 </div>
@@ -66,8 +66,8 @@ class NewItem extends Component {
                       type="text"
                       value={this.state.word}
                       validate={validate.bind(blacklist, null)}
-                      onChange={this.onInputChange.bind(this)}
-                      onEnter={this.onAddClick.bind(this)}
+                      onChange={this._onInputChange}
+                      onEnter={this._onAddClick}
                     />
                 </div>
             </div>

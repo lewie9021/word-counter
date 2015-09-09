@@ -4,12 +4,12 @@ import Input from "./Input";
 
 const CONTROLS = {
     view: [
-        {style: "danger", icon: "trash", method: "onRemoveClick"},
-        {style: "info", icon: "pencil", method: "onEditClick"}
+        {style: "danger", icon: "trash", method: "_onRemoveClick"},
+        {style: "info", icon: "pencil", method: "_onEditClick"}
     ],
     edit: [
         {style: "danger", icon: "remove", method: "onCancel"},
-        {style: "success", icon: "ok", method: "onSaveClick"}
+        {style: "success", icon: "ok", method: "_onSaveClick"}
     ]
 };
 
@@ -38,7 +38,7 @@ class Item extends Component {
         this.setState({mode, word});
     }
 
-    focusInput() {
+    _focusInput = () => {
         // Find the input element within the DOM.
         var input = React.findDOMNode(this.refs.input).childNodes[0];
 
@@ -46,35 +46,35 @@ class Item extends Component {
         input.focus();
     }
     
-    onInputChange(e) {
+    _onInputChange = (e) => {
         this.setState({
             word: e.target.value
         });
     }
 
-    onEditClick() {
+    _onEditClick = () => {
         this.props.onEdit(() => {
             this.focusInput();
         });
     }
     
-    onRemoveClick() {
+    _onRemoveClick = () => {
         var {blacklist, word} = this.props;
         
         blacklist.del(word);
     }
 
-    onSaveClick() {
+    _onSaveClick = () => {
         var {blacklist, word} = this.props;
         var newWord = this.state.word;
         
         if (blacklist.validate(word, newWord) == "success")
             return blacklist.update(word, newWord);
 
-        this.focusInput();
+        this._focusInput();
     }
 
-    renderControls() {
+    _renderControls = () => {
         var controls = CONTROLS[this.props.mode];
 
         // Map over the controls of the given mode.
@@ -87,14 +87,14 @@ class Item extends Component {
                   key={index}
                   className="pull-right"
                   bsStyle={style}
-                  onClick={handler.bind(this)}>
+                  onClick={handler}>
                     <Glyphicon glyph={icon} />
                 </Button>
             );
         });
     }
 
-    renderContent() {
+    _renderContent = () => {
         var {mode, word, blacklist} = this.props;
         var {validate} = blacklist;
         
@@ -105,8 +105,8 @@ class Item extends Component {
               ref="input"
               value={this.state.word}
               validate={validate.bind(blacklist, word)}
-              onChange={this.onInputChange.bind(this)}
-              onEnter={this.onSaveClick.bind(this)}
+              onChange={this._onInputChange}
+              onEnter={this._onSaveClick}
             />
         );
     }
@@ -117,10 +117,10 @@ class Item extends Component {
         return (
             <ListGroupItem className={`word clearfix ${mode}`}>
                 <div className="controls">
-                    {this.renderControls()}
+                    {this._renderControls()}
                 </div>
                 <div className="content">
-                    {this.renderContent()}
+                    {this._renderContent()}
                 </div>
             </ListGroupItem>
         );
