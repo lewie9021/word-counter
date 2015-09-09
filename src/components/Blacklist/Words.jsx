@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroup } from "react-bootstrap";
-import Word from "./Item";
+import Word from "./Word";
 
 class Words extends Component {
 

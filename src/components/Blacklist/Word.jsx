@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon } from "react-bootstrap";
-import Input from "./Input";
+import WordInput from "./WordInput";
 
 const CONTROLS = {
     view: [
@@ -100,7 +100,7 @@ class Word extends Component {
         
         return ((mode == "view") ?
             <strong>{word}</strong> :
-            <Input
+            <WordInput
               type="text"
               ref="input"
               value={this.state.word}

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from "react";
 import { Modal, Button } from "react-bootstrap";
-import Items from "./Items";
-import NewItem from "./NewItem";
+import Words from "./Words";
+import NewWord from "./NewWord";
 
 class BlacklistModal extends Component {
 
@@ -24,10 +24,10 @@ class BlacklistModal extends Component {
                     <Title>Blacklist Words</Title>
                 </Header>
                 <Body>
-                    <Items blacklist={blacklist} />
+                    <Words blacklist={blacklist} />
                 </Body>
                 <Footer>
-                    <NewItem blacklist={blacklist} />
+                    <NewWord blacklist={blacklist} />
                 </Footer>
             </Modal>
         );

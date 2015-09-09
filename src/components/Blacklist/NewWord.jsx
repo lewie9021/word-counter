@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from "react";
 import { Button } from "react-bootstrap";
-import WordInput from "./Input";
+import WordInput from "./WordInput";
 
 // TODO: Fix tab indexing.
 
