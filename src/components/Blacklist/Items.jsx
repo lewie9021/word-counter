@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroup } from "react-bootstrap";
-import Item from "./Item";
+import Word from "./Item";
 
-class Items extends Component {
+class Words extends Component {
 
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
@@ -31,7 +31,7 @@ class Items extends Component {
         });
     }
 
-    _renderItems = () => {
+    _renderWords = () => {
         var {blacklist} = this.props;
         var words = Object.keys(blacklist.get()).sort();
 
@@ -39,7 +39,7 @@ class Items extends Component {
             var mode = ((word == this.state.editing) ? "edit" : "view");
             
             return (
-                <Item
+                <Word
                   key={index}
                   word={word}
                   mode={mode}
@@ -54,10 +54,10 @@ class Items extends Component {
     render() {
         return (
             <ListGroup className="words">
-                {this._renderItems()}
+                {this._renderWords()}
             </ListGroup>
         );
     }
     
 }
-export default Items;
+export default Words;

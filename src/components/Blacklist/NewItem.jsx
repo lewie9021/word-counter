@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from "react";
 import { Button } from "react-bootstrap";
-import Input from "./Input";
+import WordInput from "./Input";
 
 // TODO: Fix tab indexing.
 
-class NewItem extends Component {
+class NewWord extends Component {
 
     static propTypes = {
         blacklist: PropTypes.object.isRequired
@@ -61,7 +61,7 @@ class NewItem extends Component {
                     </Button>
                 </div>
                 <div className="content">
-                    <Input
+                    <WordInput
                       ref="input"
                       type="text"
                       value={this.state.word}
@@ -76,5 +76,5 @@ class NewItem extends Component {
     
 }
 
-export default NewItem;
+export default NewWord;
 

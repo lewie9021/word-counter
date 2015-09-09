@@ -13,7 +13,7 @@ const CONTROLS = {
     ]
 };
 
-class Item extends Component {
+class Word extends Component {
 
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
@@ -128,4 +128,4 @@ class Item extends Component {
     
 }     
 
-export default Item;
+export default Word;
