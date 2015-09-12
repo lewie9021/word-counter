@@ -71,7 +71,9 @@ class Parser {
     get() {
         return {
             details: this.details.get(),
-            wordDensity: this.wordDensity.sort(sortWordDensity)
+            wordDensity: this.wordDensity
+                             .sort(sortWordDensity)
+                             .slice(0, 10)
         };
     }
     
