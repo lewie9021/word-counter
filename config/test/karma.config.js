@@ -3,7 +3,7 @@ module.exports = function(config) {
         // Run in Chrome.
         browsers: ["Chrome"], 
 
-        singleRun: true,
+        singleRun: false,
         
         files: [
             "app.entry.js"
@@ -20,7 +20,8 @@ module.exports = function(config) {
         
         frameworks: [
             "mocha",
-            "source-map-support"
+            "chai",
+            "chai-sinon"
         ],
         
         reporters: [
@@ -40,6 +41,10 @@ module.exports = function(config) {
             // Enable the Mocha testing framework and reporter.
             require("karma-mocha"),
             require("karma-mocha-reporter"),
+
+            // Enable Chai and Sinon.
+            require("karma-chai"),
+            require("karma-chai-sinon"),
             
             // MAke source mapping work correctly.
             require("karma-sourcemap-loader"),
