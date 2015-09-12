@@ -1,5 +1,8 @@
 import Stats from "./Stats";
 
+// TODO: Decouple this class from Stats. It shouldn't control the lifecycle of Stats instances.
+// TODO: Fix a bug with the sort order of word density. It respects the count, but no the word itself.
+
 class Parser {
 
     constructor() {

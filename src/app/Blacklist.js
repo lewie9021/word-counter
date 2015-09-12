@@ -5,13 +5,11 @@ class Blacklist extends EventEmitter {
     constructor(blacklist) {
         super();
 
-        this._blacklist = {};
-
-        this.on("change", () => {
-            this.save();
-        });
-        
+        // Load existing blacklisted words from local storage.
         this._blacklist = this.load();
+
+        // When changes are made (add, update, del), save it to local storage.
+        this.on("change", this.save);
     }
 
     load() {
@@ -23,7 +21,8 @@ class Blacklist extends EventEmitter {
         
         words = JSON.parse(words);
 
-        // Convert the array of words into an map.
+        // Convert the array of words into a map.
+        // e.g. ["hello", "world"] -> {hello: null, world: null}
         return words.reduce((blacklist, word) => {
             // Ensure the word is valid.
             if (this.validate(null, word))
@@ -35,7 +34,9 @@ class Blacklist extends EventEmitter {
 
     save() {
         var words = Object.keys(this._blacklist);
-        
+
+        // Save the blacklist as an array.
+        // e.g. {hello: null, world: null} -> ["hello", "world"]
         localStorage.setItem("blacklist", JSON.stringify(words));
     }
 
@@ -43,14 +44,14 @@ class Blacklist extends EventEmitter {
         var word = sanitizeInput(input);
         
         this._blacklist[word] = null;
-        this.emit("change");
+        this.emitChange();
     }
 
     del(input) {
         var word = sanitizeInput(input);
         
-        delete this._blacklist[word];        
-        this.emit("change");
+        delete this._blacklist[word];
+        this.emitChange();
     }
     
     update(oldInput, newInput) {
@@ -59,7 +60,7 @@ class Blacklist extends EventEmitter {
         
         delete this._blacklist[oldWord];
         this._blacklist[sanitizeInput(newWord)] = null;
-        this.emit("change");
+        this.emitChange();
     }
 
     validate(oldInput, input) {
@@ -76,9 +77,14 @@ class Blacklist extends EventEmitter {
         
         return "error";
     }
+
+    emitChange() {
+        this.emit("change");
+    }
     
     get() {
-        return this._blacklist;
+        // Provide public access to the 'private' blacklist map.
+        return (this._blacklist || {});
     }
     
 }
