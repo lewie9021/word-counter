@@ -23,7 +23,7 @@ function extractTextResolver(config) {
 module.exports = function(buildMode) {
     var config = new WebpackConfig();
     var rootPath = Path.join(__dirname, "..", "..");
-    var outputPath = Path.join(rootPath, "dist", "dev");
+    var outputPath = Path.join(rootPath, "dist", buildMode);
 
     // Define general configuration.
     config.merge({
