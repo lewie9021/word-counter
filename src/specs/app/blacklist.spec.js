@@ -58,7 +58,7 @@ describe("app/Blacklist", function() {
         
     });
 
-    xdescribe("methods", () => {
+    describe("methods", () => {
         var blacklist;
         
         beforeEach(() => {
@@ -67,13 +67,157 @@ describe("app/Blacklist", function() {
 
         describe("load", () => {
 
+            it("should look for a 'blacklist' item in local storage", () => {
+                var spy = sandbox.spy();
+                var words;
+
+                // Mimic the behaviour that would occur if the 'blacklist' item wasn't in local storage.
+                sandbox.stub(window.localStorage, "getItem", (...args) => {
+                    spy(...args);
+                    
+                    return null;
+                });
+
+                words = blacklist.load();
+                
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["blacklist"]);
+            });
+            
+            it("should return an empty object if a 'blacklist' item isn't in local storage", () => {
+                var words;
+                
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns(null);
+
+                words = blacklist.load();
+                
+                expect(words).to.be.an("object");
+                expect(words).to.be.empty;
+            });
+
+            it("should call JSON.parse on the value stored in local storage", () => {
+                var spy = sandbox.spy();
+                var words = ["hello", "world"];
+
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns(JSON.stringify(words));
+
+                sandbox.stub(JSON, "parse", (...args) => {
+                    spy(...args);
+
+                    return words;
+                });
+                
+                blacklist.load();
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql([JSON.stringify(words)]);
+            });
+
+            it("should call window.confirm if the 'blacklist' item in local storage can't be parsed", () => {
+                var message = "An error occured loading the blacklist (it could be corrupt). Would you like it to be cleared?";
+                var spy = sandbox.spy();
+                
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns("invalid value");
+
+                sandbox.stub(window, "confirm", spy);
+                
+                blacklist.load();
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql([message]);
+            });
+
+            it("should call localStorage.removeItem if the user accepts the confirm alert", () => {
+                var spy = sandbox.spy();
+                
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns("invalid value");
+
+                sandbox.stub(window, "confirm").returns(true);
+
+                sandbox.stub(window.localStorage, "removeItem", spy);
+                
+                blacklist.load();
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["blacklist"]);
+            });
+
+            it("should return an empty object if the parsed 'blacklist' item isn't an array of strings", () => {
+                var invalidEntry = {a: 1, b: 2, c: 3};
+                var words;
+
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns(JSON.stringify(invalidEntry));
+
+                words = blacklist.load();
+
+                expect(words).to.eql({});
+            });
+
+            it("should call this.validate for each word in local storage", () => {
+                var spy = sandbox.spy();
+                var words = ["hello", "world"];
+
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns(JSON.stringify(words));
+
+                sandbox.stub(blacklist, "validate", spy);
+
+                blacklist.load();
+
+                expect(spy.callCount).to.eq(words.length);
+                words.forEach((word, index) => {
+                    expect(spy.getCall(index).args).to.eql([null, word]);
+                });
+            });
+
+            it("should ignore invalid words via this.validate", () => {
+                var blacklistWords = ["valid", "invalid"];
+                var words;
+
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns(JSON.stringify(blacklistWords));
+
+                // Stub the validate method to return true only when the word is 'valid'.
+                sandbox.stub(blacklist, "validate", (oldInput, input) => {
+                    return (input == "valid");
+                });
+
+                words = blacklist.load();
+
+                expect(Object.keys(words)).to.eql(["valid"]);
+            });
+            
+            it("should return an object converted from the array of words in local storage", () => {
+                var blacklistWords = ["hello", "world"];
+                var words;
+
+                sandbox.stub(window.localStorage, "getItem")
+                       .returns(JSON.stringify(blacklistWords));
+
+                words = blacklist.load();
+
+                expect(words).to.eql({
+                    hello: null,
+                    world: null
+                });
+            });
+            
+        });
+
+        xdescribe("save", () => {
+
             it("should work as expected", () => {
                 expect("completed").to.eq(true);
             });
             
         });
 
-        describe("save", () => {
+        xdescribe("add", () => {
 
             it("should work as expected", () => {
                 expect("completed").to.eq(true);
@@ -81,7 +225,7 @@ describe("app/Blacklist", function() {
             
         });
 
-        describe("add", () => {
+        xdescribe("del", () => {
 
             it("should work as expected", () => {
                 expect("completed").to.eq(true);
@@ -89,7 +233,7 @@ describe("app/Blacklist", function() {
             
         });
 
-        describe("del", () => {
+        xdescribe("update", () => {
 
             it("should work as expected", () => {
                 expect("completed").to.eq(true);
@@ -97,7 +241,7 @@ describe("app/Blacklist", function() {
             
         });
 
-        describe("update", () => {
+        xdescribe("validate", () => {
 
             it("should work as expected", () => {
                 expect("completed").to.eq(true);
@@ -105,7 +249,7 @@ describe("app/Blacklist", function() {
             
         });
 
-        describe("validate", () => {
+        xdescribe("emitChange", () => {
 
             it("should work as expected", () => {
                 expect("completed").to.eq(true);
@@ -113,15 +257,7 @@ describe("app/Blacklist", function() {
             
         });
 
-        describe("emitChange", () => {
-
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
-            });
-            
-        });
-
-        describe("get", () => {
+        xdescribe("get", () => {
 
             it("should work as expected", () => {
                 expect("completed").to.eq(true);

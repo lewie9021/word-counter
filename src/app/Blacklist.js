@@ -2,7 +2,7 @@ import {EventEmitter} from "events";
 
 class Blacklist extends EventEmitter {
 
-    constructor(blacklist) {
+    constructor() {
         super();
 
         // Load existing blacklisted words from local storage.
@@ -18,9 +18,19 @@ class Blacklist extends EventEmitter {
 
         if (!words)
             return blacklist;
-        
-        words = JSON.parse(words);
 
+        try {
+            words = JSON.parse(words);
+        } catch (e) {
+            if (confirm("An error occured loading the blacklist (it could be corrupt). Would you like it to be cleared?"))
+                localStorage.removeItem("blacklist");
+            
+            return blacklist;
+        }
+
+        if (!(words instanceof Array))
+            return blacklist;
+        
         // Convert the array of words into a map.
         // e.g. ["hello", "world"] -> {hello: null, world: null}
         return words.reduce((blacklist, word) => {
