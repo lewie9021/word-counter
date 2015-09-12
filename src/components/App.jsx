@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navbar, Nav, NavItem, Grid, Row, Col } from "react-bootstrap";
+import { Navbar, Nav, Button, Grid, Row, Col } from "react-bootstrap";
 import Parser from "../app/Parser";
 import Blacklist from "../app/Blacklist";
 import BlacklistModal from "./Blacklist/Modal"
@@ -48,22 +48,24 @@ class App extends Component {
     }
 
     render() {
-        var {details} = this.state;
+        var {details, wordDensity} = this.state;
         var brand = <a href="#/">Word Counter</a>;
         var blacklist = this.blacklist.get();
+
         // Filter out words that have been blacklisted.
-        var wordDensity = this.state.wordDensity.filter((word) => {
+        wordDensity = wordDensity.filter((word) => {
             return !(word.name in blacklist);
         });
 
         return (
             <div>
                 <Navbar brand={brand} inverse>
-                    <Nav right>
-                        <NavItem onClick={this._onShowBlacklist}>
-                            Blacklisted Words
-                        </NavItem>
-                    </Nav>
+                    <Button
+                      className="pull-right"
+                      bsStyle="info"
+                      onClick={this._onShowBlacklist}>
+                        Blacklisted Words
+                    </Button>
                 </Navbar>
                 <Grid>
                     <Row>
@@ -90,6 +92,6 @@ class App extends Component {
         );
     }
     
-}     
+}
 
 export default App;

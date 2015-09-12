@@ -5,6 +5,16 @@ $navbar-border-radius: 0px;
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "./blacklist.scss";
 
+.navbar {
+    .navbar-header {
+        float: left;
+    }
+
+    button {
+        margin-top: 8px;
+    }
+}
+
 textarea {
     resize: vertical;
     margin-bottom: 20px;
