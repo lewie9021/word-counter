@@ -288,10 +288,54 @@ describe("app/Blacklist", function() {
             
         });
 
-        xdescribe("del", () => {
+        describe("del", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            beforeEach(() => {
+                // Ensure the internal blacklist map is empty;
+                blacklist._blacklist = {};
+            });
+            
+            it("should pass the input to sanitizeInput", () => {
+                var spy = sandbox.spy();
+
+                // Rewire the private function to spy on it.
+                Module.__Rewire__("sanitizeInput", spy);
+
+                blacklist.del("hello");
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["hello"]);
+
+                // Revert the change.
+                Module.__ResetDependency__("sanitizeInput");
+            });
+
+            it("should remove the word from this._blacklist", () => {
+                blacklist._blacklist = {hello: null};
+                blacklist.del("hello");
+                
+                expect(blacklist._blacklist).to.eql({});
+            });
+            
+            it("should call this.emitChange to trigger a re-render", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emitChange", spy);
+
+                blacklist._blacklist = {hello: null};
+                blacklist.del("hello");
+                
+                expect(spy).calledOnce;
+            });
+
+            it("should not call this.emitChange if the word doesn't exist", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emitChange", spy);
+
+                blacklist.del("hello");
+                
+                expect(spy.callCount).to.eq(0);
             });
             
         });
