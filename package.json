@@ -45,6 +45,7 @@
     "webpack-dev-server": "1.10.1"
   },
   "devDependencies": {
+    "babel-plugin-rewire": "^0.1.22",
     "karma": "0.13.9",
     "karma-chai": "^0.1.0",
     "karma-chai-sinon": "^0.1.5",

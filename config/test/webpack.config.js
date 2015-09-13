@@ -9,6 +9,12 @@ module.exports = (function() {
         devtool: "inline-source-map"
     });
 
+    config.loader("babel", {
+        query: {
+            plugins: ["rewire"]
+        }
+    });
+    
     config.removeLoader("sass");
     config.removeLoader("url");
     config.removePlugin("extract-text");
