@@ -52,6 +52,10 @@ class Blacklist extends EventEmitter {
 
     add(input) {
         var word = sanitizeInput(input);
+
+        // Check if the word is already in the blacklist.
+        if (this._blacklist.hasOwnProperty(word))
+            return;
         
         this._blacklist[word] = null;
         this.emitChange();

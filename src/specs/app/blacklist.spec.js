@@ -237,10 +237,53 @@ describe("app/Blacklist", function() {
             
         });
 
-        xdescribe("add", () => {
+        describe("add", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            beforeEach(() => {
+                // Ensure the internal blacklist map is empty;
+                blacklist._blacklist = {};
+            });
+            
+            it("should pass the input to sanitizeInput", () => {
+                var spy = sandbox.spy();
+
+                // Rewire the private function to spy on it.
+                Module.__Rewire__("sanitizeInput", spy);
+
+                blacklist.add("hello");
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["hello"]);
+
+                // Revert the change.
+                Module.__ResetDependency__("sanitizeInput");
+            });
+
+            it("should add the new word to this._blacklist", () => {
+                blacklist.add("hello");
+                
+                expect(blacklist._blacklist).to.eql({hello: null});
+            });
+            
+            it("should call this.emitChange to trigger a re-render", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emitChange", spy);
+
+                blacklist.add("hello");
+                
+                expect(spy).calledOnce;
+            });
+
+            it("should not call this.emitChange if the word already exists", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emitChange", spy);
+
+                blacklist._blacklist = {hello: null};
+                blacklist.add("hello");
+                
+                expect(spy.callCount).to.eq(0);
             });
             
         });
