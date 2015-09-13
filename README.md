@@ -30,8 +30,9 @@ Word density helps me identify frequently used words that could make the article
 **Testing**
 
 - [Karma](https://www.npmjs.com/package/karma)
+- [Rewire](https://www.npmjs.com/package/babel-plugin-rewire)
 - [Mocha](https://www.npmjs.com/package/mocha)
-- [Chai](https://www.npmjs.com/package/chai)
+- [Sinon + Chai](https://www.npmjs.com/package/sinon-chai)
 
 ### Future Improvements
 
