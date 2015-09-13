@@ -50,7 +50,7 @@ class Blacklist extends EventEmitter {
         localStorage.setItem("blacklist", JSON.stringify(words));
     }
 
-    add(input) {
+    add(input, silent) {
         var word = sanitizeInput(input);
 
         // Check if the word is already in the blacklist.
@@ -58,10 +58,12 @@ class Blacklist extends EventEmitter {
             return;
         
         this._blacklist[word] = null;
-        this.emitChange();
+
+        if (!silent)
+            this.emitChange();
     }
 
-    del(input) {
+    del(input, silent) {
         var word = sanitizeInput(input);
 
         // Check if the word is in the blacklist to be deleted.
@@ -69,15 +71,24 @@ class Blacklist extends EventEmitter {
             return;
         
         delete this._blacklist[word];
-        this.emitChange();
+
+        if (!silent)
+            this.emitChange();
     }
     
     update(oldInput, newInput) {
-        var oldWord = sanitizeInput(oldInput);
-        var newWord = sanitizeInput(newInput);
+        // Check if the word is in the blacklist to be updated.
+        if (!this._blacklist.hasOwnProperty(oldInput))
+            return;
+
+        // No need to update if they are the same.
+        if (oldInput === newInput)
+            return;
+
+        // We pass a second parameter to prevent the 'change' event from spamming.
+        this.del(oldInput, true);
+        this.add(newInput, true);
         
-        delete this._blacklist[oldWord];
-        this._blacklist[sanitizeInput(newWord)] = null;
         this.emitChange();
     }
 

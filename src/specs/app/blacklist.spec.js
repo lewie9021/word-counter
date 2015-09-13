@@ -240,7 +240,7 @@ describe("app/Blacklist", function() {
         describe("add", () => {
 
             beforeEach(() => {
-                // Ensure the internal blacklist map is empty;
+                // Ensure the internal blacklist map is empty.
                 blacklist._blacklist = {};
             });
             
@@ -285,13 +285,23 @@ describe("app/Blacklist", function() {
                 
                 expect(spy.callCount).to.eq(0);
             });
+
+            it("should not call this.emitChange given a truthy 'silent' parameter", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emitChange", spy);
+
+                blacklist.add("hello", true);
+                
+                expect(spy.callCount).to.eq(0);
+            });
             
         });
 
         describe("del", () => {
 
             beforeEach(() => {
-                // Ensure the internal blacklist map is empty;
+                // Ensure the internal blacklist map is empty
                 blacklist._blacklist = {};
             });
             
@@ -337,13 +347,73 @@ describe("app/Blacklist", function() {
                 
                 expect(spy.callCount).to.eq(0);
             });
+
+            it("should not call this.emitChange given a truthy 'silent' parameter", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emitChange", spy);
+
+                blacklist._blacklist = {hello: null};
+                blacklist.del("hello", true);
+                
+                expect(spy.callCount).to.eq(0);
+            });
             
         });
 
-        xdescribe("update", () => {
+        describe("update", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            beforeEach(() => {
+                // Ensure the internal blacklist map has consistent value.
+                blacklist._blacklist = {hello: null};
+            });
+            
+            it("should pass the parameters ['oldInput', true] to this.del", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "del", spy);
+
+                blacklist.update("hello", "world");
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["hello", true]);
+            });
+
+            it("should pass the parameters ['newInput', true] to this.add", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "add", spy);
+
+                blacklist.update("hello", "world");
+
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["world", true]);
+            });
+
+            it("should short-circuit if 'oldInput' doesn't exist", () => {
+                var methods = ["del", "add", "emitChange"];
+                var spy = sandbox.spy();
+
+                // Spy on the relevent blacklist methods.
+                methods.forEach((method) => sandbox.stub(blacklist, method, spy));
+
+                // Empty the internal blacklist map to ensure 'hello' doesn't exist.
+                blacklist._blacklist = {};
+                blacklist.update("hello", "world");
+                
+                expect(spy.callCount).to.eq(0);
+            });
+                        
+            it("should short-circuit if 'oldInput' is the same as 'newInput'", () => {
+                var methods = ["del", "add", "emitChange"];
+                var spy = sandbox.spy();
+
+                // Spy on the relevent blacklist methods.
+                methods.forEach((method) => sandbox.stub(blacklist, method, spy));
+
+                blacklist.update("hello", "hello");
+
+                expect(spy.callCount).to.eq(0);
             });
             
         });
