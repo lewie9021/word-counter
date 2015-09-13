@@ -209,10 +209,30 @@ describe("app/Blacklist", function() {
             
         });
 
-        xdescribe("save", () => {
+        describe("save", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            it("should call localStorage.setItem using the key 'blacklist'", () => {
+                var spy = sandbox.spy();
+                
+                sandbox.stub(window.localStorage, "setItem", spy);
+
+                blacklist.save();
+                
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args[0]).to.eq("blacklist");
+            });
+
+            it("should pass this._blacklist (converted to an array) to localStorage.setItem", () => {
+                var _blacklist = {hello: null, world: null};
+                var words = Object.keys(_blacklist);
+                var spy = sandbox.spy();
+                
+                sandbox.stub(window.localStorage, "setItem", spy);
+
+                blacklist._blacklist = _blacklist;
+                blacklist.save();
+                
+                expect(spy.firstCall.args[1]).to.eq(JSON.stringify(words));
             });
             
         });
