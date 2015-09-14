@@ -521,7 +521,7 @@ describe("app/Blacklist", function() {
         
     });
 
-    xdescribe("private functions", () => {
+    describe("private functions", () => {
         var blacklist;
         
         beforeEach(() => {
@@ -529,9 +529,21 @@ describe("app/Blacklist", function() {
         });
         
         describe("sanitizeInput", () => {
+            var sanitizeInput;
+            
+            beforeEach(() => {
+                sanitizeInput = Module.__get__("sanitizeInput");
+            });
+            
+            it("should call toLowerCase on 'input' and return the sanitized value", () => {
+                var spy = sandbox.spy(String.prototype, "toLowerCase");
+                var input = "Hello";
+                
+                expect(sanitizeInput(input)).to.eq("hello");
+                expect(spy).calledOnce;
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+                // Ensure it's not just any string.
+                expect(spy.firstCall.thisValue).to.eql(input);
             });
             
         });
