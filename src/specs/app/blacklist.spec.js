@@ -418,12 +418,67 @@ describe("app/Blacklist", function() {
             
         });
 
-        xdescribe("validate", () => {
+        describe("validate", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            beforeEach(() => {
+                // Ensure the internal blacklist map is empty
+                blacklist._blacklist = {};
             });
             
+            it("should call match on 'input' using /[A-Z]+/i to ensure it only contains letters", () => {
+                var spy = sandbox.spy();
+                var input = "hello";
+
+                // Stub the match method for strings.
+                sandbox.stub(String.prototype, "match", spy);
+                
+                blacklist.validate(null, input);
+                
+                expect(spy).calledOnce;
+
+                var {thisValue, args} = spy.firstCall;
+                
+                // Ensure it's not just any string.
+                expect(thisValue).to.eql(input);
+
+                // Ensure the method has been passed the correct regex pattern.
+                expect(args[0].toString()).to.eql("/[A-Z]+/i");
+            });
+
+            it("should be invalid if 'input' is empty", () => {
+                var result = blacklist.validate(null, "");
+                
+                expect(result).to.be.eq("error");
+            });
+
+            it("should be invalid if 'input' already exists in this._blacklist", () => {
+                var result;
+
+                blacklist._blacklist = {hello: null};
+                result = blacklist.validate(null, "hello");
+
+                expect(result).to.be.eq("error");
+            });
+
+            it("should be invalid if 'input' doesn't match against /[A-Z]+/i", () => {
+                var input = "input1";
+                var match = input.match(/[A-Z]+/i);
+                var result = blacklist.validate(null, input);
+
+                // Ensure it's invalid.
+                expect(match && match[0]).to.not.eq(input);
+                expect(result).to.be.eq("error");
+            });
+
+            it("should be valid if 'oldInput' is identical and 'input' is already in this._blacklist", () => {
+                var result;
+
+                blacklist._blacklist = {hello: null};
+                result = blacklist.validate("hello", "hello");
+
+                expect(result).to.be.eq("success");
+            });
+
         });
 
         xdescribe("emitChange", () => {
