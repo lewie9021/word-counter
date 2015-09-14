@@ -481,12 +481,19 @@ describe("app/Blacklist", function() {
 
         });
 
-        xdescribe("emitChange", () => {
+        describe("emitChange", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            it("should call this.emit with the value 'change'", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(blacklist, "emit", spy);
+
+                blacklist.emitChange();
+                
+                expect(spy).calledOnce;
+                expect(spy.firstCall.args).to.eql(["change"]);
             });
-            
+
         });
 
         xdescribe("get", () => {
