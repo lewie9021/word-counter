@@ -496,12 +496,27 @@ describe("app/Blacklist", function() {
 
         });
 
-        xdescribe("get", () => {
+        describe("get", () => {
 
-            it("should work as expected", () => {
-                expect("completed").to.eq(true);
+            it("should return this._blacklist", () => {
+                var _blacklist = blacklist._blacklist;
+                var result = blacklist.get();
+
+                expect(result).to.eq(_blacklist);
             });
-            
+
+            it("should fallback to an empty object if this._blacklist doesn't exist", () => {
+                var result, _blacklist;
+                
+                blacklist._blacklist = null;
+                
+                result = blacklist.get();
+                _blacklist = blacklist._blacklist;
+                
+                expect(result).to.eql({});
+                expect(result).to.not.eq(_blacklist);
+            });
+
         });
         
     });
