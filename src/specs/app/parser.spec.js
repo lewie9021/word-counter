@@ -164,15 +164,35 @@ describe("app/parser", function() {
             
         });
 
-        xdescribe("getSpaces", () => {
+        describe("getSpaces", () => {
             var method;
 
             beforeEach(() => {
                 method = Module.__get__("getSpaces");
             });
             
-            it("should work as expected", () => {
-                expect("completed").to.be(true);
+            it("should return an empty array if 'sentence' is an empty string", () => {
+                var sentence = "";
+                var result = method(sentence);
+
+                expect(result.length).to.eq(0);
+                expect(result).to.eql([]);
+            });
+
+            it("should return a single item array if 'sentence' contains a single space", () => {
+                var sentence = " ";
+                var result = method(sentence);
+                
+                expect(result.length).to.eq(1);
+                expect(result).to.eql([sentence]);
+            });
+
+            it("should return an array with a length that matches the amount of spaces in 'sentence'", () => {
+                var sentence = "    ";
+                var result = method(sentence);
+                
+                expect(result.length).to.eq(4);
+                expect(result).to.eql([" ", " ", " ", " "]);
             });
             
         });
