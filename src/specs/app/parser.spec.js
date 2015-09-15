@@ -65,12 +65,61 @@ describe("app/parser", function() {
 
         });
 
-        xdescribe("getSetences", () => {
-        
-            it("should work as expected", () => {
-                expect("completed").to.be(true);
+        describe("getSetences", () => {
+            var method;
+
+            beforeEach(() => {
+                method = Module.__get__("getSetences");
+            });
+            
+            it("should return an empty array if 'paragraph' is an empty string", () => {
+                var paragraph = "";
+                var result = method(paragraph);
+
+                expect(result.length).to.eq(0);
+                expect(result).to.eql([]);
             });
 
+            it("should return a single item array if 'paragraph' contains a single sentence", () => {
+                var paragraph = "The quick brown fox jumps over the lazy dog.";
+                var result = method(paragraph);
+                
+                expect(result.length).to.eq(1);
+                expect(result).to.eql([paragraph]);
+            });
+
+            it("should not require a trailing terminal punctuation mark to validate a sentence", () => {
+                var paragraph = "The quick brown fox jumps over the lazy dog";
+                var result = method(paragraph);
+                
+                expect(result.length).to.eq(1);
+                expect(result).to.eql([paragraph]);
+            });
+
+            it("should not confuse a decimal point with a period (full stop)", () => {
+                var paragraph = "Rounded to 11 decimal places, Pi is equal to 3.14159265359.";
+                var result = method(paragraph);
+
+                expect(result.length).to.eq(1);
+                expect(result).to.eql([paragraph]);
+            });
+
+            it("should not confuse an ellipsis (...) as empty additional empty sentences", () => {
+                var paragraph = "So...what happened?";
+                var result = method(paragraph);
+
+                expect(result.length).to.eql(1);
+                expect(result).to.eql([paragraph]);
+            });
+
+            it("should acknowledge all three terminal punctuation marks ('.', '!', '?')", () => {
+                var paragraph = "Hello there! My name is Lewis. What's yours?";
+                var result = method(paragraph);
+
+                expect(result.length).to.eq(3);
+                expect(result).to.eql(["Hello there! ", "My name is Lewis. ", "What's yours?"]);
+            });
+            
         });
 
         xdescribe("getWords", () => {
