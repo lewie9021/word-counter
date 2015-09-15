@@ -122,12 +122,59 @@ describe("app/parser", function() {
             
         });
 
-        xdescribe("getWords", () => {
-        
+        describe("getWords", () => {
+            var method;
+
+            beforeEach(() => {
+                method = Module.__get__("getWords");
+            });
+            
+            it("should return an empty array if 'sentence' is an empty string", () => {
+                var sentence = "";
+                var result = method(sentence);
+
+                expect(result.length).to.eq(0);
+                expect(result).to.eql([]);
+            });
+
+            it("should return a single item array if 'sentence' contains a single word", () => {
+                var sentence = "Hello";
+                var result = method(sentence);
+                
+                expect(result.length).to.eq(1);
+                expect(result).to.eql([sentence]);
+            });
+
+            it("should return an array of words that don't contain spaces", () => {
+                var sentence = " Hello world!";
+                var result = method(sentence);
+
+                expect(result.length).to.eq(2);
+                expect(result).to.eql(["Hello", "world"]);
+            });
+
+            it("should make the exeception for words that contain an apostrophe", () => {
+                var contractions = ["doesn't", "wouldn't", "it's", "can't", "you've"];
+                var sentence = "Some examples include: Lewis', " + contractions.join(", ");
+                var result = method(sentence);
+
+                expect(result.length).to.eq(9);
+                expect(result).to.eql(["Some", "examples", "include", "Lewis'"].concat(contractions));
+            });
+            
+        });
+
+        xdescribe("getSpaces", () => {
+            var method;
+
+            beforeEach(() => {
+                method = Module.__get__("getSpaces");
+            });
+            
             it("should work as expected", () => {
                 expect("completed").to.be(true);
             });
-
+            
         });
         
     });
