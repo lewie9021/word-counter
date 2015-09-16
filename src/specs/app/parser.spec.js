@@ -14,18 +14,62 @@ describe("app/parser", function() {
 
         describe("parser", () => {
 
-            xdescribe("integration", () => {
+            describe("integration", () => {
                 
                 it("should call getParagraphs with 'input'", () => {
-                    expect("completed").to.be(true);
+                    var spy = sandbox.spy(Module.__get__("getParagraphs"));
+                    var input = "Hello World!";
+
+                    // Rewire the private function to spy on it.
+                    Module.__Rewire__("getParagraphs", spy);
+                    
+                    // expect("completed").to.be(true);
+                    Module(input);
+
+                    expect(spy).calledOnce;
+                    expect(spy.firstCall.args).to.eql([input]);
+
+                    // Revert the change.
+                    Module.__ResetDependency__("getParagraphs");
                 });
 
-                xit("should call getSentences for each paragraph returned by getParagraphs", () => {
-                    expect("completed").to.be(true);
+                it("should call getSentences for each paragraph returned by getParagraphs", () => {
+                    var spy = sandbox.spy(Module.__get__("getSentences"));
+                    var input = "Line 1.\nLine 2.";
+
+                    // Rewire the private function to spy on it.
+                    Module.__Rewire__("getSentences", spy);
+
+                    Module(input);
+
+                    expect(spy).calledTwice;
+                    expect(spy.firstCall.args).to.eql(["Line 1."]);
+                    expect(spy.secondCall.args).to.eql(["Line 2."]);
+                    
+                    // Revert the change.
+                    Module.__ResetDependency__("getSentences");
                 });
 
-                xit("should call getWords and getSpaces for each sentence returned by getSentences", () => {
-                    expect("completed").to.be(true);
+                it("should call getWords and getSpaces for each sentence returned by getSentences", () => {
+                    var input = "Hello World. Here is line 1.\nHello World. Here is line 2.";
+                    
+                    ["getWords", "getSpaces"].forEach((functionName) => {
+                        var spy = sandbox.spy(Module.__get__(functionName));
+                        
+                        // Rewire the private function to spy on it.
+                        Module.__Rewire__(functionName, spy);
+
+                        Module(input);
+                        
+                        expect(spy.callCount).to.eq(4);
+                        expect(spy.getCall(0).args).to.eql(["Hello World. "]);
+                        expect(spy.getCall(1).args).to.eql(["Here is line 1."]);
+                        expect(spy.getCall(2).args).to.eql(["Hello World. "]);
+                        expect(spy.getCall(3).args).to.eql(["Here is line 2."]);
+
+                        // Revert the change.
+                        Module.__ResetDependency__(functionName);
+                    });
                 });
                 
             });
