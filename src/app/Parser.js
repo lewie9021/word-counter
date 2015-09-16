@@ -1,85 +1,48 @@
-import Stats from "./Stats";
-
-// TODO: Decouple this class from Stats. It shouldn't control the lifecycle of Stats instances.
-// TODO: Fix a bug with the sort order of word density. It respects the count, but no the word itself.
-
-class Parser {
-
-    constructor() {
-        this.details = new Stats();
-        this.wordDensity = [];
-
-        this.details
-            .add("words", "Words")
-            .add("characters", "Characters")
-            .add("characters-no-spaces", "Characters (no spaces)")
-            .add("sentences", "Sentences")
-            // .add("words-average-sentence", "Average Words (sentence)")
-            // .add("characters-average-sentence", "Average Characters (sentence)")
-            .add("paragraphs", "Paragraphs");
-    }
+function parser(input) {
+    var paragraphs = getParagraphs(input);
+    var wordDensity = {};
+    var counts = {
+        sentences: 0,
+        words: 0,
+        spaces: 0
+    };
     
-    process(input) {
-        var paragraphs = getParagraphs(input);
-        var wordDensity = {};
-        var counts = {
-            sentences: 0,
-            words: 0,
-            spaces: 0
-        };
-        
-        paragraphs.forEach(paragraph => {
-            var sentences = getSetences(paragraph);
+    paragraphs.forEach(paragraph => {
+        var sentences = getSentences(paragraph);
 
-            counts.sentences += sentences.length;
+        counts.sentences += sentences.length;
 
-            sentences.forEach(sentence => {
-                var words = getWords(sentence);
-                var spaces = getSpaces(sentence);
+        sentences.forEach(sentence => {
+            var words = getWords(sentence);
+            var spaces = getSpaces(sentence);
 
-                words.forEach(word => {
-                    var key = word.toLowerCase();
-                    var count = (wordDensity[key] || 0);
+            words.forEach(word => {
+                var key = word.toLowerCase();
+                var count = (wordDensity[key] || 0);
 
-                    wordDensity[key] = count + 1;
-                });
-
-                counts.words += words.length;
-                counts.spaces += spaces.length;
+                wordDensity[key] = count + 1;
             });
+
+            counts.words += words.length;
+            counts.spaces += spaces.length;
         });
+    });
 
-        this.clearStats();
-        
-        this.details
-            .set("words", counts.words)
-            .set("characters", input.length)
-            .set("characters-no-spaces", input.length - counts.spaces)
-            .set("sentences", counts.sentences)
-            .set("paragraphs", paragraphs.length);
-
-        this.wordDensity = Object.keys(wordDensity).map(word => {
+    return {
+        details: {
+            words: counts.words,
+            characters: input.length,
+            charactersNoSpaces: (input.length - counts.spaces),
+            sentences: counts.sentences,
+            paragraphs: paragraphs.length
+        },
+        wordDensity: Object.keys(wordDensity).map((word) => {
             return {
                 name: word,
                 value: wordDensity[word]
             };
-        });
-    }
-
-    clearStats() {
-        this.details.clear();
-        this.wordDensity = [];
-    }
-    
-    get() {
-        return {
-            details: this.details.get(),
-            wordDensity: this.wordDensity
-                             .sort(sortWordDensity)
-                             .slice(0, 10)
-        };
-    }
-    
+        })
+    };
 }
 
 function getParagraphs(input) {
@@ -87,12 +50,12 @@ function getParagraphs(input) {
     var paragraphs = (input.length ? input.split(/\n+/) : []);
 
     // Remove any empty paragraphs.
-    return paragraphs.filter(paragraph => {
+    return paragraphs.filter((paragraph) => {
         return paragraph.length;
     });
 }
 
-function getSetences(paragraph) {
+function getSentences(paragraph) {
     return (paragraph.match(/(.+?)([\?|\!|\.]\s|$)/g) || []);
 }
 
@@ -101,9 +64,11 @@ function getWords(sentence) {
 }
 
 function getSpaces(sentence) {
-    return (sentence.match(/\s/g) || []);
+    return (sentence.split(" ").length - 1);
 }
 
+// TODO: Move this into the component that wishes to sort the word density array.
+// TODO: Fix a bug with the sort order. It respects the count, but not the word itself.
 function sortWordDensity(a, b) {
     if ((a && a.value) < (b && b.value))
         return 1;
@@ -114,4 +79,4 @@ function sortWordDensity(a, b) {
     return 0;
 }
 
-export default Parser;
+export default parser;
