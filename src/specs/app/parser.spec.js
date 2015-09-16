@@ -10,14 +10,83 @@ describe("app/parser", function() {
         sandbox.restore();
     });
     
-    xdescribe("public functions", () => {
+    describe("public functions", () => {
 
         describe("parser", () => {
-        
-            it("should work as expected", () => {
-                expect("completed").to.be(true);
+
+            xdescribe("integration", () => {
+                
+                it("should call getParagraphs with 'input'", () => {
+                    expect("completed").to.be(true);
+                });
+
+                it("should call getSentences for each paragraph returned by getParagraphs", () => {
+                    expect("completed").to.be(true);
+                });
+
+                it("should call getWords and getSpaces for each sentence returned by getSentences", () => {
+                    expect("completed").to.be(true);
+                });
+                
             });
 
+            xdescribe("returned value", () => {
+
+                it("should contain the keys 'details' and 'wordDensity'", () => {
+                    expect("completed").to.be(true);
+                });
+
+                describe("details", () => {
+
+                    it("should be an object", () => {
+                        expect("completed").to.be(true);
+                    });
+                    
+                    it("should contain the keys defined in constants/ParserDetails", () => {
+                        expect("completed").to.be(true);
+                    });
+
+                    it("should count the number of words in 'input'", () => {
+                        expect("completed").to.be(true);
+                    });
+
+                    it("should count the number of characters in 'input'", () => {
+                        expect("completed").to.be(true);
+                    });
+
+                    it("should count the number of characters (no spaces) in 'input'", () => {
+                        expect("completed").to.be(true);
+                    });
+
+                    it("should count the number of sentences in 'input'", () => {
+                        expect("completed").to.be(true);
+                    });
+
+                    it("should count the number of paragraphs in 'input'", () => {
+                        expect("completed").to.be(true);
+                    });
+                    
+                });
+
+                describe("wordDensity", () => {
+
+                    it("should be an array", () => {
+                        
+                    });
+
+                    it("should contain the keys 'name', 'value'", () => {
+                        
+                    });
+                    
+                    it("should count the number of occurences each word has in 'input'", () => {
+                        
+                    });
+                    
+                });
+
+            });
+            
+            
         });
 
     });
@@ -65,11 +134,11 @@ describe("app/parser", function() {
 
         });
 
-        describe("getSetences", () => {
+        describe("getSentences", () => {
             var method;
 
             beforeEach(() => {
-                method = Module.__get__("getSetences");
+                method = Module.__get__("getSentences");
             });
             
             it("should return an empty array if 'paragraph' is an empty string", () => {
