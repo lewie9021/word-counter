@@ -74,62 +74,106 @@ describe("app/parser", function() {
                 
             });
 
-            xdescribe("returned value", () => {
-
+            describe("returned value", () => {
+                var input = "Hello World. Here is line 1.\nHello World. Here is line 2.";
+                
                 it("should contain the keys 'details' and 'wordDensity'", () => {
-                    expect("completed").to.be(true);
+                    var result = Module("Hello world!");
+                    
+                    expect(Object.keys(result)).to.eql(["details", "wordDensity"]);
                 });
 
                 describe("details", () => {
 
                     it("should be an object", () => {
-                        expect("completed").to.be(true);
+                        var {details} = Module(input);
+                        
+                        expect(details).to.be.an("object");
                     });
                     
                     it("should contain the keys defined in constants/ParserDetails", () => {
-                        expect("completed").to.be(true);
+                        var keys = Object.keys(require("../../constants/ParserDetails"));
+                        var {details} = Module(input);
+
+                        expect(Object.keys(details).length).to.eq(keys.length);
+                        keys.forEach((key) => {
+                            expect(details[key]).to.exist;
+                        });
                     });
 
                     it("should count the number of words in 'input'", () => {
-                        expect("completed").to.be(true);
+                        var {details} = Module(input);
+                        
+                        expect(details.words).to.eq(12);
                     });
 
                     it("should count the number of characters in 'input'", () => {
-                        expect("completed").to.be(true);
+                        var {details} = Module(input);
+                        
+                        expect(details.characters).to.eq(input.length);
                     });
 
                     it("should count the number of characters (no spaces) in 'input'", () => {
-                        expect("completed").to.be(true);
+                        var {details} = Module(input);
+                        var noSpaces = input.replace(/ /g, "");
+                        
+                        expect(details.charactersNoSpaces).to.eq(noSpaces.length);
                     });
 
                     it("should count the number of sentences in 'input'", () => {
-                        expect("completed").to.be(true);
+                        var {details} = Module(input);
+                        
+                        expect(details.sentences).to.eq(4);
                     });
 
                     it("should count the number of paragraphs in 'input'", () => {
-                        expect("completed").to.be(true);
+                        var {details} = Module(input);
+                        
+                        expect(details.paragraphs).to.eq(input.split("\n").length);
                     });
                     
                 });
 
                 describe("wordDensity", () => {
-
+                    
                     it("should be an array", () => {
+                        var {wordDensity} = Module("Hello World!");
                         
+                        expect(wordDensity).to.be.an("array");
                     });
 
+                    // TODO: Use the keys 'value' and 'count'.
                     it("should contain the keys 'name', 'value'", () => {
+                        var {wordDensity} = Module("Hello World!");
+
+                        wordDensity.forEach((item) => {
+                            expect(item.name).to.exist;
+                            expect(item.value).to.exist;
+                        });
+                    });
+
+                    it("should have a length that matches the number of different words in 'input'", () => {
+                        var {wordDensity} = Module(input);
                         
+                        expect(wordDensity.length).to.eq(7);
                     });
                     
-                    it("should count the number of occurences each word has in 'input'", () => {
+                    it("should count the number of occurrences each word has in 'input'", () => {
+                        var {wordDensity} = Module(input);
                         
+                        wordDensity.forEach((item) => {
+                            var {name, value} = item;
+
+                            if (name == "1" || name == "2")
+                                return expect(value).to.eq(1);
+
+                            expect(value).to.eq(2);
+                        });
                     });
                     
                 });
 
             });
-            
             
         });
 
