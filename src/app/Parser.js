@@ -24,7 +24,7 @@ function parser(input) {
             });
 
             counts.words += words.length;
-            counts.spaces += spaces.length;
+            counts.spaces += spaces;
         });
     });
 
