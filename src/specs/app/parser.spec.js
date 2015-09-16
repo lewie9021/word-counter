@@ -23,7 +23,6 @@ describe("app/parser", function() {
                     // Rewire the private function to spy on it.
                     Module.__Rewire__("getParagraphs", spy);
                     
-                    // expect("completed").to.be(true);
                     Module(input);
 
                     expect(spy).calledOnce;
@@ -128,17 +127,18 @@ describe("app/parser", function() {
                 });
 
                 describe("wordDensity", () => {
+                    var wordDensity;
+
+                    beforeEach(() => {
+                        wordDensity = Module(input).wordDensity;
+                    });
                     
                     it("should be an array", () => {
-                        var {wordDensity} = Module("Hello World!");
-                        
                         expect(wordDensity).to.be.an("array");
                     });
 
                     // TODO: Use the keys 'value' and 'count'.
                     it("should contain the keys 'name', 'value'", () => {
-                        var {wordDensity} = Module("Hello World!");
-
                         wordDensity.forEach((item) => {
                             expect(item.name).to.exist;
                             expect(item.value).to.exist;
@@ -146,14 +146,10 @@ describe("app/parser", function() {
                     });
 
                     it("should have a length that matches the number of different words in 'input'", () => {
-                        var {wordDensity} = Module(input);
-                        
                         expect(wordDensity.length).to.eq(7);
                     });
                     
                     it("should count the number of occurrences each word has in 'input'", () => {
-                        var {wordDensity} = Module(input);
-                        
                         wordDensity.forEach((item) => {
                             var {name, value} = item;
 
