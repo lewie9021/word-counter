@@ -84,16 +84,18 @@ describe("app/parser", function() {
                 });
 
                 describe("details", () => {
+                    var details;
 
+                    beforeEach(() => {
+                        details = Module(input).details;
+                    });
+                    
                     it("should be an object", () => {
-                        var {details} = Module(input);
-                        
                         expect(details).to.be.an("object");
                     });
                     
                     it("should contain the keys defined in constants/ParserDetails", () => {
                         var keys = Object.keys(require("../../constants/ParserDetails"));
-                        var {details} = Module(input);
 
                         expect(Object.keys(details).length).to.eq(keys.length);
                         keys.forEach((key) => {
@@ -102,33 +104,24 @@ describe("app/parser", function() {
                     });
 
                     it("should count the number of words in 'input'", () => {
-                        var {details} = Module(input);
-                        
                         expect(details.words).to.eq(12);
                     });
 
                     it("should count the number of characters in 'input'", () => {
-                        var {details} = Module(input);
-                        
                         expect(details.characters).to.eq(input.length);
                     });
 
                     it("should count the number of characters (no spaces) in 'input'", () => {
-                        var {details} = Module(input);
                         var noSpaces = input.replace(/ /g, "");
                         
                         expect(details.charactersNoSpaces).to.eq(noSpaces.length);
                     });
 
                     it("should count the number of sentences in 'input'", () => {
-                        var {details} = Module(input);
-                        
                         expect(details.sentences).to.eq(4);
                     });
 
                     it("should count the number of paragraphs in 'input'", () => {
-                        var {details} = Module(input);
-                        
                         expect(details.paragraphs).to.eq(input.split("\n").length);
                     });
                     
