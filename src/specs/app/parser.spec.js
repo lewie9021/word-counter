@@ -20,11 +20,11 @@ describe("app/parser", function() {
                     expect("completed").to.be(true);
                 });
 
-                it("should call getSentences for each paragraph returned by getParagraphs", () => {
+                xit("should call getSentences for each paragraph returned by getParagraphs", () => {
                     expect("completed").to.be(true);
                 });
 
-                it("should call getWords and getSpaces for each sentence returned by getSentences", () => {
+                xit("should call getWords and getSpaces for each sentence returned by getSentences", () => {
                     expect("completed").to.be(true);
                 });
                 
@@ -240,28 +240,25 @@ describe("app/parser", function() {
                 method = Module.__get__("getSpaces");
             });
             
-            it("should return an empty array if 'sentence' is an empty string", () => {
+            it("should return 0 if 'sentence' is an empty string", () => {
                 var sentence = "";
                 var result = method(sentence);
 
-                expect(result.length).to.eq(0);
-                expect(result).to.eql([]);
+                expect(result).to.eq(0);
             });
 
-            it("should return a single item array if 'sentence' contains a single space", () => {
+            it("should return 1 if 'sentence' contains a single space", () => {
                 var sentence = " ";
                 var result = method(sentence);
                 
-                expect(result.length).to.eq(1);
-                expect(result).to.eql([sentence]);
+                expect(result).to.eq(1);
             });
 
-            it("should return an array with a length that matches the amount of spaces in 'sentence'", () => {
+            it("should return a value that matches the number of spaces in 'sentence'", () => {
                 var sentence = "    ";
                 var result = method(sentence);
                 
-                expect(result.length).to.eq(4);
-                expect(result).to.eql([" ", " ", " ", " "]);
+                expect(result).to.eq(4);
             });
             
         });
