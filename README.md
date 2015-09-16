@@ -13,6 +13,10 @@ Word density helps me identify frequently used words that could make the article
 - {main screen}
 - {blacklist modal}
 
+### Component Hierarchy
+
+- {component hierarchy diagram}
+
 ### Technology Stack
 
 **Languages**
