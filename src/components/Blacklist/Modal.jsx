@@ -5,6 +5,8 @@ import NewWord from "./NewWord";
 
 class BlacklistModal extends Component {
 
+    static displayName = "BlacklistModal"
+    
     static propTypes = {
         showModal: PropTypes.bool.isRequired,
         blacklist: PropTypes.object.isRequired,

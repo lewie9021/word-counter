@@ -3,6 +3,8 @@ import { Panel, ListGroup, ListGroupItem, Badge } from "react-bootstrap";
 
 class StatsBucket extends Component {
 
+    static displayName = "StatsBucket"
+    
     static propTypes = {
         title: PropTypes.string.isRequired,
         stats: PropTypes.array.isRequired
@@ -32,6 +34,6 @@ class StatsBucket extends Component {
         );
     }
     
-}     
+}
 
 export default StatsBucket;
