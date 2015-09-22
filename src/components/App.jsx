@@ -7,35 +7,34 @@ import StatsBucket from "./StatsBucket";
 
 class App extends Component {
 
+    static displayName = "App"
+    
     constructor(props) {
         super(props);
 
         // Instantiate a Blacklist to maintain words we don't want to see in the word density bucket.
         this.blacklist = new Blacklist();
         
-        // Create an instance of Parser to deal with input changes from the TextArea component.
-        this.parser = new Parser();
-
         // When words are added, modified, or removed, we must re-render.
         this.blacklist.on("change", () => {
             this.forceUpdate();
         });
         
         this.state = {
-            // Provides the properties 'details' and 'wordDensity'.
-            ...this.parser.get(),
+            ...Parser(""),
             showModal: false
         };
     }
 
     _onTextAreaChange = (e) => {
-        this.parser.process(e.target.value);
-
+        var stats = Parser(e.target.value);
+        
         // Update state to trigger a re-render.
-        this.setState(this.parser.get());
+        this.setState(stats);
     }
 
     _onShowBlacklist = (e) => {
+        console.log("called _onShowBlacklist");
         this.setState({
             showModal: true
         });
@@ -72,7 +71,7 @@ class App extends Component {
                         <Col xs={12} md={8}>
                             <textarea
                               className="form-control"
-                              rows="10"
+                              rows={10}
                               placeholder="Enter text here..."
                               onChange={this._onTextAreaChange} />
                         </Col>
