@@ -34,7 +34,6 @@ class App extends Component {
     }
 
     _onShowBlacklist = (e) => {
-        console.log("called _onShowBlacklist");
         this.setState({
             showModal: true
         });
