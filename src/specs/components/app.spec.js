@@ -150,11 +150,113 @@ describe("components/App", () => {
             });
 
             it("should be passed an instance of Blacklist to enable functionality", () => {
+                var Blacklist = require("../../app/Blacklist");
+                
                 expect($modal.props).to.have.property("blacklist", instance.blacklist);
+                expect($modal.props.blacklist).to.be.an.instanceof(Blacklist);
             });
 
         });
         
     });
 
+    describe("methods", () => {
+        var instance;
+
+        beforeEach(() => {
+            instance = new Module();
+        });
+        
+        describe("onTextAreaChange", () => {
+            var method;
+
+            beforeEach(() => {
+                method = instance._onTextAreaChange.bind(instance);
+            });
+            
+            it("should pass the value of the textarea to the Parser module", () => {
+                var event = {target: {value: "Hello world!"}};
+                var spy = sandbox.spy();
+
+                // Rewire the Parser to spy on it.
+                Module.__Rewire__("Parser", spy);
+                
+                method(event);
+
+                expect(spy.firstCall.args[0]).to.eql(event.target.value);
+
+                // Revert the change.
+                Module.__ResetDependency__("Parser");
+            });
+
+            it("should pass the returned value of the Parser module to this.setState", () => {
+                var event = {target: {value: "Hello world!"}};
+                var spy = sandbox.spy();
+                var stats = {
+                    details: "details",
+                    wordDensity: "wordDensity"
+                };
+
+                // Rewire the Parser to spy on it.
+                Module.__Rewire__("Parser", () => stats);
+
+                // Stub this.setState.
+                sandbox.stub(instance, "setState", spy);
+                
+                method(event);
+
+                expect(spy.firstCall.args[0]).to.eql(stats);
+
+                // Revert the change.
+                Module.__ResetDependency__("Parser");
+            });
+            
+        });
+
+        describe("onShowBlacklist", () => {
+            var method;
+
+            beforeEach(() => {
+                method = instance._onShowBlacklist.bind(instance);
+            });
+            
+            it("should set the component's state property 'showModal' to true", () => {
+                var spy = sandbox.spy();
+                
+                // Stub this.setState.
+                sandbox.stub(instance, "setState", spy);
+
+                method();
+                
+                expect(spy.firstCall.args[0]).to.eql({
+                    showModal: true
+                });
+            });
+            
+        });
+
+        describe("onHideBlacklist", () => {
+            var method;
+
+            beforeEach(() => {
+                method = instance._onHideBlacklist.bind(instance);
+            });
+            
+            it("should set the component's state property 'showModal' to false", () => {
+                var spy = sandbox.spy();
+                
+                // Stub this.setState.
+                sandbox.stub(instance, "setState", spy);
+
+                method();
+                
+                expect(spy.firstCall.args[0]).to.eql({
+                    showModal: false
+                });
+            });
+            
+        });
+        
+    });
+    
 });
