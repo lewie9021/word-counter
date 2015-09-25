@@ -13,12 +13,13 @@ class StatsBucket extends Component {
     _renderStats = () => {
         // Map over each stat object and return a list item element.
         // Note: We use a 'key' property to help React identify a stat easier during reconciliation.
-        // TODO: This is currently problematic as the order of the array is ultimately a result of Object.keys().
-        return this.props.stats.map((stat, index) => {
+        return this.props.stats.map((stat) => {
+            var {key, name, value} = stat;
+            
             return (
-                <ListGroupItem key={index}>
-                    <span>{stat.name}</span>
-                    <Badge pullRight={true}>{stat.value}</Badge>
+                <ListGroupItem key={key}>
+                    <span>{name}</span>
+                    <Badge pullRight={true}>{value}</Badge>
                 </ListGroupItem>
             );
         });
