@@ -93,7 +93,6 @@ describe("components/Blacklist/Modal", () => {
 
                 $body = $(output, "> ModalBody")[0];
             });
-
             
             it("should contain a custom 'Words' element", () => {
                 var Words = require("../../../components/Blacklist/Words");
@@ -124,7 +123,6 @@ describe("components/Blacklist/Modal", () => {
 
                 $footer = $(output, "> ModalFooter")[0];
             });
-
             
             it("should contain a custom 'NewWord' element", () => {
                 var NewWord = require("../../../components/Blacklist/NewWord");
