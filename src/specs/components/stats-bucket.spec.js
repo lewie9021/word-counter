@@ -1,20 +1,5 @@
-import React from "react/addons";
 import $ from "react-shallow-query";
-
-function renderComponent(Component, props) {
-    var { TestUtils } = React.addons;
-    var renderer = TestUtils.createRenderer();
-    var output, instance;
-    
-    renderer.render(<Component {...props} />);
-    
-    return {
-        renderer,
-        output: renderer.getRenderOutput(),
-        instance: renderer._instance._instance
-    };
-}
-
+import { renderComponent } from "../helpers";
 
 describe("components/StatsBucket", () => {
     var Module, sandbox;
