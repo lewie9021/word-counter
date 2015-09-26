@@ -4,6 +4,8 @@ import Word from "./Word";
 
 class Words extends Component {
 
+    static displayName = "BlacklistWords"
+
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
     }

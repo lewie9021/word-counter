@@ -6,6 +6,8 @@ import WordInput from "./WordInput";
 
 class NewWord extends Component {
 
+    static displayName = "BlacklistNewWord"
+    
     static propTypes = {
         blacklist: PropTypes.object.isRequired
     }
