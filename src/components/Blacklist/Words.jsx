@@ -20,11 +20,11 @@ class Words extends Component {
     }
 
     componentWillMount = () => {
-        props.blacklist.on("change", this._onCancel);
+        this.props.blacklist.on("change", this._onCancel);
     }
 
     componentWillUnmount = () => {
-        props.blacklist.off("change", this._onCancel);
+        this.props.blacklist.off("change", this._onCancel);
     }
     
     _onEdit = (word, callback) => {
