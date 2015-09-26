@@ -13,14 +13,20 @@ class Words extends Component {
     constructor(props) {
         super(props);
 
-        props.blacklist.on("change", this._onCancel);
-        
         this.state = {
             // Contains the word that's being edited.
             editing: null
         }
     }
 
+    componentWillMount = () => {
+        props.blacklist.on("change", this._onCancel);
+    }
+
+    componentWillUnmount = () => {
+        props.blacklist.off("change", this._onCancel);
+    }
+    
     _onEdit = (word, callback) => {
         this.setState({
             editing: word
@@ -33,12 +39,11 @@ class Words extends Component {
         });
     }
 
-    _renderWords = () => {
-        var {blacklist} = this.props;
+    _renderWords = (blacklist, editing) => {
         var words = Object.keys(blacklist.get()).sort();
 
         return words.map((word, index) => {
-            var mode = ((word == this.state.editing) ? "edit" : "view");
+            var mode = ((word == editing) ? "edit" : "view");
             
             return (
                 <Word
@@ -54,9 +59,12 @@ class Words extends Component {
     }
     
     render() {
+        var {blacklist} = this.props;
+        var {editing} = this.state;
+        
         return (
             <ListGroup className="words">
-                {this._renderWords()}
+                {this._renderWords(blacklist, editing)}
             </ListGroup>
         );
     }
