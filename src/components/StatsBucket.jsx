@@ -10,10 +10,13 @@ class StatsBucket extends Component {
         stats: PropTypes.array.isRequired
     }
     
-    _renderStats = () => {
+    _renderStats = (stats) => {
+        if (!Array.isArray(stats))
+            throw new Error("You must provide an array of stats");
+        
         // Map over each stat object and return a list item element.
         // Note: We use a 'key' property to help React identify a stat easier during reconciliation.
-        return this.props.stats.map((stat) => {
+        return stats.map((stat) => {
             var {key, name, value} = stat;
             
             return (
@@ -26,10 +29,12 @@ class StatsBucket extends Component {
     }
     
     render() {
+        var {title, stats} = this.props;
+        
         return (
-            <Panel header={this.props.title} bsStyle="info">
+            <Panel header={title} bsStyle="info">
                 <ListGroup fill>
-                    {this._renderStats()}
+                    {this._renderStats(stats)}
                 </ListGroup>
             </Panel>
         );

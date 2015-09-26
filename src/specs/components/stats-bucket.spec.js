@@ -105,4 +105,51 @@ describe("components/StatsBucket", () => {
 
     });
 
+    describe("methods", () => {
+        var instance;
+        
+        beforeEach(() => {
+            instance = new Module();
+        });
+        
+        describe("_renderStats", () => {
+            var method;
+            
+            beforeEach(() => {
+                method = instance._renderStats.bind(instance);
+            });
+
+            it("should throw if no 'stats' are given", () => {
+                var err = "You must provide an array of stats";
+                
+                expect(() => {
+                    method();
+                }).to.throw(err);
+            });
+
+            it("should throw if 'stats' isn't an array", () => {
+                var err = "You must provide an array of stats";
+                
+                [undefined, null, {}, "Hello", 5, true].forEach((invalidValue) => {
+                    expect(() => {
+                        method(invalidValue);
+                    }).to.throw(err);
+                });
+            });
+            
+            it("should return an array of React elements", () => {
+                var props = [1, 2, 3].map((key) => ({key}));
+                var result = method(props);
+                
+                expect(result.length).to.eq(props.length);
+
+                result.forEach((element) => {
+                    expect(element).to.have.property("_isReactElement", true);
+                });
+            });
+            
+        });
+        
+    });
+    
 });
