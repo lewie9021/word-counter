@@ -88,45 +88,114 @@ describe("components/Blacklist/Words", () => {
 
     });
 
-    xdescribe("methods", () => {
-
+    describe("methods", () => {
+        var instance;
+        
+        beforeEach(() => {
+            var blacklist = getMockBlacklist();
+            
+            instance = new Module({blacklist});
+        });
+        
         describe("componentWillMount", () => {
-
+            var method;
+            
+            beforeEach(() => {
+                method = instance.componentWillMount.bind(instance);
+            });
+            
             it("should attach an event listener on the blacklist object for the 'change' event", () => {
+                var {blacklist} = instance.props;
+                var spy = sandbox.spy();
                 
+                sandbox.stub(blacklist, "addListener", spy);
+
+                method();
+
+                expect(spy.calledOnce).to.eq(true);
+                expect(spy.firstCall.args).to.eql(["change", instance._onCancel]);
             });
             
         });
 
         describe("componentWillUnmount", () => {
-
+            var method;
+            
+            beforeEach(() => {
+                method = instance.componentWillUnmount.bind(instance);
+            });
+            
             it("should detach an event listener from the blacklist object for the 'change' event", () => {
+                var {blacklist} = instance.props;
+                var spy = sandbox.spy();
                 
+                sandbox.stub(blacklist, "removeListener", spy);
+
+                method();
+
+                expect(spy.calledOnce).to.eq(true);
+                expect(spy.firstCall.args).to.eql(["change", instance._onCancel]);
             });
             
         });
 
         describe("_onEdit", () => {
-
+            var method;
+            
+            beforeEach(() => {
+                method = instance._onEdit.bind(instance);
+            });
+            
             it("should call this.setState, setting 'editing' to the passed 'word' variable", () => {
+                var spy = sandbox.spy();
                 
+                sandbox.stub(instance, "setState", spy);
+
+                method("hello");
+
+                expect(spy.calledOnce).to.eq(true);
+                expect(spy.firstCall.args[0]).to.eql({
+                    editing: "hello"
+                });
             });
 
             it("should pass a callback to the second parameter of this.setState", () => {
+                var spy = sandbox.spy();
+                var callback = () => {};
                 
+                sandbox.stub(instance, "setState", spy);
+
+                method("hello", callback);
+
+                expect(spy.calledOnce).to.eq(true);
+                expect(spy.firstCall.args[1]).to.eq(callback);
             });
             
         });
 
         describe("_onCancel", () => {
-
+            var method;
+            
+            beforeEach(() => {
+                method = instance._onCancel.bind(instance);
+            });
+            
             it("should call this.setState, setting 'editing' to null", () => {
+                var spy = sandbox.spy();
                 
+                sandbox.stub(instance, "setState", spy);
+
+                method();
+
+                expect(spy.calledOnce).to.eq(true);
+                expect(spy.firstCall.args[0]).to.eql({
+                    editing: null
+                });
             });
             
         });
 
-        describe("_renderWords", () => {
+        xdescribe("_renderWords", () => {
 
             it("should call blacklist.get", () => {
                 
