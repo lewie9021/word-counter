@@ -20,11 +20,11 @@ class Words extends Component {
     }
 
     componentWillMount = () => {
-        this.props.blacklist.on("change", this._onCancel);
+        this.props.blacklist.addListener("change", this._onCancel);
     }
 
     componentWillUnmount = () => {
-        this.props.blacklist.off("change", this._onCancel);
+        this.props.blacklist.removeListener("change", this._onCancel);
     }
     
     _onEdit = (word, callback) => {
@@ -40,9 +40,10 @@ class Words extends Component {
     }
 
     _renderWords = (blacklist, editing) => {
-        var words = Object.keys(blacklist.get()).sort();
+        var words = blacklist.get();
+        var sortedWords = Object.keys(words).sort();
 
-        return words.map((word, index) => {
+        return sortedWords.map((word, index) => {
             var mode = ((word == editing) ? "edit" : "view");
             
             return (

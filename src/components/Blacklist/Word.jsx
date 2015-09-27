@@ -15,6 +15,8 @@ const CONTROLS = {
 
 class Word extends Component {
 
+    static displayName = "BlacklistWord"
+    
     static propTypes = {
         blacklist: PropTypes.object.isRequired,
         onEdit: PropTypes.func.isRequired,
