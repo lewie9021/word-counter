@@ -14,6 +14,14 @@ function getMockBlacklist(store = {}) {
     return blacklist;
 }
 
+function arrayToObject(arr, val = null) {
+    return arr.reduce((obj, item) => {
+        obj[item] = val;
+
+        return obj;
+    }, {});
+}
+
 describe("components/Blacklist/Words", () => {
     var Module, sandbox;
     
@@ -73,13 +81,13 @@ describe("components/Blacklist/Words", () => {
                 expect($listGroup.props.children.length).to.eq(2);
             });
 
-            it("should only have child elements are of type 'Word'", () => {
+            it("should only have child elements are of type 'BlacklistWord'", () => {
                 var blacklist = getMockBlacklist({
                     hello: null,
                     world: null
                 });
                 var $listGroup = renderComponent(Module, {blacklist}).output;
-                var $listItems = $($listGroup, "> Word");
+                var $listItems = $($listGroup, "> BlacklistWord");
                 
                 expect($listItems.length).to.eq(2);
             });
@@ -195,42 +203,106 @@ describe("components/Blacklist/Words", () => {
             
         });
 
-        xdescribe("_renderWords", () => {
-
-            it("should call blacklist.get", () => {
+        describe("_renderWords", () => {
+            var method, words, wordsMap, blacklist;
+            
+            beforeEach(() => {
+                method = instance._renderWords.bind(instance);
                 
+                words = ["world", "hello", "test"];
+                wordsMap = arrayToObject(words);
+                blacklist = getMockBlacklist(wordsMap);
+            });
+            
+            it("should call blacklist.get", () => {
+                var spy = sandbox.spy(blacklist, "get");
+
+                method(blacklist, null);
+                
+                expect(spy.calledOnce).to.eq(true);
             });
 
             it("should sort the blacklisted words in ascending order", () => {
-                
+                var sortedWords = words.sort();
+                var spy = sandbox.spy();
+
+                // Spy on the map method to inspect the sorted words array.
+                sandbox.stub(Array.prototype, "map", spy);
+
+                method(blacklist, null);
+
+                expect(spy.calledOnce).to.eq(true);
+                expect(spy.thisValues[0]).to.eql(sortedWords);
             });
 
-            it("should return an array of Word React elements", () => {
-                
+            it("should return an array of 'BlacklistWord' React elements", () => {
+                var wordElements = method(blacklist, null);
+
+                expect(wordElements.length).to.eq(words.length);
+
+                wordElements.forEach((wordElement) => {
+                    expect(wordElement).to.have.property("_isReactElement", true);
+                    expect(wordElement.type.displayName).to.eq("BlacklistWord");
+                });
             });
 
             it("should pass a value for the 'key' attribute that corresponds the loop index", () => {
-                
+                var wordElements = method(blacklist, null);
+
+                wordElements.forEach((wordElement, index) => {
+                    expect(wordElement.key).to.eq(index.toString());
+                });
             });
 
             it("should set the 'word' attribute to the value of words[i]", () => {
-                
+                var wordElements = method(blacklist, null);
+                var sortedWords = words.sort();
+
+                wordElements.forEach((wordElement, index) => {
+                    expect(wordElement.props.word).to.eq(sortedWords[index]);
+                });
             });
 
-            it("should calculate the 'mode' attribute based on if this.state.editing === words[i]", () => {
-                
+            it("should calculate the 'mode' attribute based on if the parameter 'editing' === words[i]", () => {
+                var [hello, test, world] = method(blacklist, "test");
+
+                expect(hello.props.mode).to.eq("view");
+                expect(test.props.mode).to.eq("edit");
+                expect(world.props.mode).to.eq("view");
             });
 
             it("should pass a reference to the blacklist object for the 'blacklist' attribute", () => {
-                
+                var wordElements = method(blacklist, null);
+
+                wordElements.forEach((wordElement) => {
+                    expect(wordElement.props.blacklist).to.eq(blacklist);
+                });
             });
 
             it("should set the 'onEdit' attribute to this._onEdit with the 'word' parameter pre-populated", () => {
+                var sortedWords = words.sort();
+                var spy = sandbox.spy();
+                var wordElements;
                 
+                // Spy on the map method to inspect the sorted words array.
+                sandbox.stub(Function.prototype, "bind", spy);
+
+                wordElements = method(blacklist, null);
+
+                expect(spy.callCount).to.eq(3);
+
+                wordElements.forEach((wordElement, index) => {
+                    expect(spy.thisValues[index]).to.eq(instance._onEdit);
+                    expect(spy.getCall(index).args[1]).to.eq(words[index]);
+                });
             });
 
             it("should map the 'onCancel' attribute to this._onCancel", () => {
+                var wordElements = method(blacklist, null);
                 
+                wordElements.forEach((wordElement) => {
+                    expect(wordElement.props.onCancel).to.eq(instance._onCancel);
+                });
             });
             
         });
