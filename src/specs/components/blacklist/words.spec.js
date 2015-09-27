@@ -3,9 +3,8 @@ import { PropTypes } from "react";
 import $ from "react-shallow-query";
 import { renderComponent } from "../../helpers";
 
-function getMockBlacklist() {
+function getMockBlacklist(store = {}) {
     var blacklist = new EventEmitter();
-    var store = {};
 
     blacklist._blacklist = store;
     blacklist.get = () => {
@@ -53,27 +52,36 @@ describe("components/Blacklist/Words", () => {
         
     });
     
-    xdescribe("structure", () => {
+    describe("structure", () => {
 
         describe("list-group", () => {
-            var $listGroup;
-
-            beforeEach(() => {
-                $listGroup = renderComponent(Module, {
-                    blacklist: getMockBlacklist()
-                }).output;
-            });
-
+            
             it("should set the className attribute to 'words'", () => {
-                
+                var blacklist = getMockBlacklist();
+                var $listGroup = renderComponent(Module, {blacklist}).output;
+
+                expect($listGroup.props.className).to.eq("words");
             });
 
             it("should have a props.children length that matches the number of blacklisted words", () => {
+                var blacklist = getMockBlacklist({
+                    hello: null,
+                    world: null
+                });
+                var $listGroup = renderComponent(Module, {blacklist}).output;
                 
+                expect($listGroup.props.children.length).to.eq(2);
             });
 
             it("should only have child elements are of type 'Word'", () => {
+                var blacklist = getMockBlacklist({
+                    hello: null,
+                    world: null
+                });
+                var $listGroup = renderComponent(Module, {blacklist}).output;
+                var $listItems = $($listGroup, "> Word");
                 
+                expect($listItems.length).to.eq(2);
             });
 
         });
