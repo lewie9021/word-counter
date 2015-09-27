@@ -1,3 +1,4 @@
+import { EventEmitter } from "events";
 import React from "react/addons";
 
 function renderComponent(Component, props) {
@@ -14,6 +15,27 @@ function renderComponent(Component, props) {
     };
 }
 
+function getMockBlacklist(store = {}) {
+    var blacklist = new EventEmitter();
+
+    blacklist._blacklist = store;
+    blacklist.get = () => {
+        return store;
+    };
+    
+    return blacklist;
+}
+
+function arrayToObject(arr, val = null) {
+    return arr.reduce((obj, item) => {
+        obj[item] = val;
+
+        return obj;
+    }, {});
+}
+
 export default {
-    renderComponent
+    renderComponent,
+    getMockBlacklist,
+    arrayToObject
 };

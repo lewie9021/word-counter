@@ -1,26 +1,6 @@
-import { EventEmitter } from "events";
 import { PropTypes } from "react";
 import $ from "react-shallow-query";
-import { renderComponent } from "../../helpers";
-
-function getMockBlacklist(store = {}) {
-    var blacklist = new EventEmitter();
-
-    blacklist._blacklist = store;
-    blacklist.get = () => {
-        return store;
-    };
-    
-    return blacklist;
-}
-
-function arrayToObject(arr, val = null) {
-    return arr.reduce((obj, item) => {
-        obj[item] = val;
-
-        return obj;
-    }, {});
-}
+import { renderComponent, getMockBlacklist, arrayToObject } from "../../helpers";
 
 describe("components/Blacklist/Words", () => {
     var Module, sandbox;
