@@ -1,4 +1,5 @@
 import { EventEmitter } from "events";
+import { PropTypes } from "react";
 import $ from "react-shallow-query";
 import { renderComponent } from "../../helpers";
 
@@ -27,18 +28,27 @@ describe("components/Blacklist/Words", () => {
         sandbox.restore();
     });
 
-    xdescribe("instantation", () => {
+    describe("instantation", () => {
 
         it("should have a displayName of 'BlacklistWords'", () => {
+            expect(Module.displayName).to.eq("BlacklistWords");
             
         });
 
         it("should require a prop 'blacklist' that must be an object", () => {
+            var {propTypes} = Module;
             
+            expect(propTypes).to.exist;
+            expect(Object.keys(propTypes).length).to.eq(1);
+            expect(propTypes.blacklist).to.eq(PropTypes.object.isRequired);
         });
 
         it("should set this.state.editing to null", () => {
+            var {state} = new Module({blacklist: {}});
             
+            expect(state).to.eql({
+                editing: null
+            });
         });
         
     });
