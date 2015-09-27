@@ -17,6 +17,10 @@ Word density helps me identify frequently used words that could make the article
 
 - {component hierarchy diagram}
 
+### Dependency Graph (Modules Tree)
+
+- {project dependency graph}
+
 ### Technology Stack
 
 **Languages**
