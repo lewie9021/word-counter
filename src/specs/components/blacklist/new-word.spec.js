@@ -15,7 +15,7 @@ describe("components/Blacklist/NewWord", () => {
         sandbox.restore();
     });
 
-    describe("instantation", () => {
+    describe("instantiation", () => {
 
         it("should have a displayName of 'BlacklistNewWord'", () => {
             expect(Module.displayName).to.eq("BlacklistNewWord");
