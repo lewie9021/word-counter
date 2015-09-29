@@ -48,46 +48,68 @@ describe("components/Blacklist/NewWord", () => {
         var blacklist = getMockBlacklist();
         
         describe("root", () => {
+            var $root;
+
+            beforeEach(() => {
+                $root = renderComponent(Module, {blacklist}).output;
+            });
             
             it("should have the classes 'word', 'clearfix', and 'create'", () => {
-                var $root = renderComponent(Module, {blacklist}).output;
                 var classNames = $root.props.className.split(" ");
                 
                 expect(classNames).to.eql(["word", "clearfix", "create"]);
             });
 
             it("should contain a .controls div element", () => {
-                var $root = renderComponent(Module, {blacklist}).output;
                 var $controls = $($root, "> .controls");
 
                 expect($controls.length).to.eq(1);
+                expect($controls[0]).to.have.property("_isReactElement", true);
             });
 
             it("should contain a .content div element", () => {
-                var $root = renderComponent(Module, {blacklist}).output;
                 var $content = $($root, "> .content");
 
                 expect($content.length).to.eq(1);
+                expect($content[0]).to.have.property("_isReactElement", true);
             });
 
         });
 
         describe("controls", () => {
+            var $controls, instance;
+
+            beforeEach(() => {
+                var component = renderComponent(Module, {blacklist});
+
+                $controls = $(component.output, "> .controls");
+                instance = component.instance;
+            });
 
             it("should contain a button element with the text 'Add Word'", () => {
-                
+                var $button = $($controls, "> Button");
+
+                expect($button.length).to.eq(1);
+                expect($button[0]).to.have.property("_isReactElement", true);
+                expect($button[0].props).to.have.property("children", "Add Word");
             });
             
             it("should apply a class of 'pull-right' to the button", () => {
-                
+                var $button = $($controls, "> Button")[0];
+
+                expect($button.props).to.have.property("className", "pull-right");
             });
 
             it("should assign 'success' to the bsStyle attribute of the button", () => {
-                
+                var $button = $($controls, "> Button")[0];
+
+                expect($button.props).to.have.property("bsStyle", "success");
             });
 
             it("should attach an onClick handler (this._onAddClick) to the button", () => {
-                
+                var $button = $($controls, "> Button")[0];
+
+                expect($button.props).to.have.property("onClick", instance._onAddClick);
             });
 
         });
