@@ -115,29 +115,63 @@ describe("components/Blacklist/NewWord", () => {
         });
 
         describe("content", () => {
+            var $content, instance;
+
+            before(() => {
+                var component = renderComponent(Module, {blacklist});
+
+                $content = $(component.output, "> .content");
+                instance = component.instance;
+            });
             
-            it("should contain an element of type 'WordInput'", () => {
-                
+            it("should contain an element of type 'BlacklistWordInput'", () => {
+                var $wordInput = $($content, "> BlacklistWordInput");
+
+                expect($wordInput.length).to.eq(1);
+                expect($wordInput[0]).to.have.property("_isReactElement", true);
             });
 
             it("should add a ref attribute of 'input' to the WordInput element", () => {
-                
+                var $wordInput = $($content, "> BlacklistWordInput")[0];
+
+                expect($wordInput).to.have.property("ref", "input");
             });
 
             it("should pass a value attribute referencing this.state.word to the WordInput element", () => {
-                
+                var $wordInput = $($content, "> BlacklistWordInput")[0];
+
+                expect($wordInput.props).to.have.property("value", instance.state.word);
             });
 
             it("should pass the blacklist.validate method as 'validate' to the WordInput element", () => {
+                var spy = sandbox.spy();
+                var $root, $wordInput;
+
+                sandbox.stub(Function.prototype, "bind", function(...args) {
+                    spy.apply(this, args);
+                    
+                    return "blacklist.validate";
+                });
                 
+                $root = renderComponent(Module, {blacklist}).output;
+                $wordInput = $($root, "> .content > BlacklistWordInput")[0];
+                
+                expect(spy.called).to.eq(true);
+                expect(spy.firstCall.args).to.eql([blacklist, null]);
+                expect(spy.firstCall.thisValue).to.eq(blacklist.validate);
+                expect($wordInput.props).to.have.property("validate", "blacklist.validate");
             });
 
             it("should attach an onChange handler (this._onInputChange) to the WordInput element", () => {
+                var $wordInput = $($content, "> BlacklistWordInput")[0];
 
+                expect($wordInput.props).to.have.property("onChange", instance._onInputChange);
             });
 
             it("should attach an onEnter handler (this._onAddClick) to the WordInput element", () => {
+                var $wordInput = $($content, "> BlacklistWordInput")[0];
 
+                expect($wordInput.props).to.have.property("onEnter", instance._onAddClick);
             });
             
         });
