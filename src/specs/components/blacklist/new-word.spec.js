@@ -45,19 +45,29 @@ describe("components/Blacklist/NewWord", () => {
     });
     
     describe("structure", () => {
-
+        var blacklist = getMockBlacklist();
+        
         describe("root", () => {
             
             it("should have the classes 'word', 'clearfix', and 'create'", () => {
+                var $root = renderComponent(Module, {blacklist}).output;
+                var classNames = $root.props.className.split(" ");
                 
+                expect(classNames).to.eql(["word", "clearfix", "create"]);
             });
 
             it("should contain a .controls div element", () => {
-                
+                var $root = renderComponent(Module, {blacklist}).output;
+                var $controls = $($root, "> .controls");
+
+                expect($controls.length).to.eq(1);
             });
 
             it("should contain a .content div element", () => {
-                
+                var $root = renderComponent(Module, {blacklist}).output;
+                var $content = $($root, "> .content");
+
+                expect($content.length).to.eq(1);
             });
 
         });
