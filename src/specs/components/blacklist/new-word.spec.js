@@ -179,10 +179,14 @@ describe("components/Blacklist/NewWord", () => {
     });
 
     describe("methods", () => {
-        var instance;
+        var instance, blacklist;
         
         beforeEach(() => {
-            var blacklist = getMockBlacklist();
+            blacklist = getMockBlacklist();
+            blacklist.add = () => {};
+            blacklist.validate = () => {
+                return "success";
+            };
             
             instance = new Module({blacklist});
         });
@@ -193,29 +197,97 @@ describe("components/Blacklist/NewWord", () => {
             beforeEach(() => {
                 method = instance._onAddClick.bind(instance);
             });
-            
+
             it("should call blacklist.validate with this.state.word as the second argument", () => {
+                var spy = sandbox.spy(blacklist, "validate");
                 
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([null, instance.state.word]);
             });
 
             it("should call React.findDOMNode with a reference to WordInput if the entry is invalid", () => {
+                var spy = sandbox.spy();
+
+                instance.refs = {
+                    input: "WordInput"
+                };
                 
+                blacklist.validate = () => {
+                    return "error";
+                };
+                
+                // Rewire React.findDOMNode
+                Module.__Rewire__("React", {
+                    findDOMNode: (...args) => {
+                        spy(...args);
+
+                        return {
+                            childNodes: [{
+                                focus: () => {}
+                            }]
+                        };
+                    }
+                });
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql(["WordInput"]);
+
+                Module.__ResetDependency__("React");
             });
 
             it("should call focus on the element retrieved from React.findDOMNode", () => {
+                var spy = sandbox.spy();
+
+                instance.refs = {
+                    input: "WordInput"
+                };
                 
+                blacklist.validate = () => {
+                    return "error";
+                };
+                
+                // Rewire React.findDOMNode
+                Module.__Rewire__("React", {
+                    findDOMNode: (...args) => {
+                        return {
+                            childNodes: [{
+                                focus: spy
+                            }]
+                        };
+                    }
+                });
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+
+                Module.__ResetDependency__("React");
             });
 
             it("should only call setState and blacklist.add when the entry is valid", () => {
-                
-            });
-            
-            it("should set this.state.word to an empty string", () => {
-                
+                var spy = sandbox.spy(instance, "setState");
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args[0]).to.eql({
+                    word: ""
+                });
             });
 
             it("should pass this.state.word to blacklist.add", () => {
-                
+                var spy = sandbox.spy(blacklist, "add");
+
+                instance.state.word = "Hello";
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql(["Hello"]);
             });
             
         });
@@ -228,7 +300,17 @@ describe("components/Blacklist/NewWord", () => {
             });
 
             it("should set this.state.word to the value of the changed input element", () => {
-                
+                var spy = sandbox.spy(instance, "setState");
+                var event = {
+                    target: {
+                        value: "Hello"
+                    }
+                };
+
+                method(event);
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args[0]).to.eql({word: "Hello"});
             });
             
         });
