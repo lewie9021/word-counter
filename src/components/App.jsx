@@ -33,7 +33,7 @@ class App extends Component {
         this.setState(stats);
     }
 
-    _onShowBlacklist = (e) => {
+    _onShowBlacklist = () => {
         this.setState({
             showModal: true
         });

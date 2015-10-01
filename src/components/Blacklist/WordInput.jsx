@@ -3,6 +3,8 @@ import { Input } from "react-bootstrap";
 
 class WordInput extends Component {
 
+    static displayName = "BlacklistWordInput"
+    
     static PropTypes = {
         value: PropTypes.string.isRequired,
         validate: PropTypes.func.isRequired,

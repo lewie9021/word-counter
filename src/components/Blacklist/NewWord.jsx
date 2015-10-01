@@ -24,7 +24,7 @@ class NewWord extends Component {
     _onAddClick = () => {
         var {blacklist} = this.props;
         var input = this.state.word;
-
+        
         if (blacklist.validate(null, input) != "success") {
             // Find the input element within the DOM.
             let element = React.findDOMNode(this.refs.input).childNodes[0];
@@ -39,7 +39,7 @@ class NewWord extends Component {
         });
 
         // Add the new word to the blacklist.
-        blacklist.add(input);        
+        blacklist.add(input);
     }
 
     _onInputChange = (e) => {
