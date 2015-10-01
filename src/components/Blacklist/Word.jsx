@@ -1,17 +1,7 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon } from "react-bootstrap";
+import CONTROLS from "../../constants/Controls";
 import WordInput from "./WordInput";
-
-const CONTROLS = {
-    view: [
-        {style: "danger", icon: "trash", method: "_onRemoveClick"},
-        {style: "info", icon: "pencil", method: "_onEditClick"}
-    ],
-    edit: [
-        {style: "danger", icon: "remove", method: "onCancel"},
-        {style: "success", icon: "ok", method: "_onSaveClick"}
-    ]
-};
 
 class Word extends Component {
 
