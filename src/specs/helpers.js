@@ -19,6 +19,7 @@ function getMockBlacklist(store = {}) {
     var blacklist = new EventEmitter();
 
     blacklist._blacklist = store;
+    blacklist.validate = () => {};
     blacklist.get = () => {
         return store;
     };
