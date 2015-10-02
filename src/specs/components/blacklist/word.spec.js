@@ -255,8 +255,8 @@ describe("components/Blacklist/Word", () => {
                 method = instance.componentWillReceiveProps.bind(instance);
             });
 
-            it("should work", () => {
-
+            it("should call this.setState with values props.mode and props.word", () => {
+                
             });
             
         });
@@ -268,8 +268,12 @@ describe("components/Blacklist/Word", () => {
                 method = instance._focusInput.bind(instance);
             });
 
-            it("should work", () => {
+            it("should call React.findDOMNode with the value of this.refs.input", () => {
 
+            });
+
+            it("should call focus on the DOM element referenced at this.refs.input", () => {
+                
             });
             
         });
@@ -281,8 +285,8 @@ describe("components/Blacklist/Word", () => {
                 method = instance._onInputChange.bind(instance);
             });
 
-            it("should work", () => {
-
+            it("should call this.setState of 'word' with the value of e.target.value", () => {
+                
             });
             
         });
@@ -294,8 +298,12 @@ describe("components/Blacklist/Word", () => {
                 method = instance._onEditClick.bind(instance);
             });
 
-            it("should work", () => {
+            it("should call props.onEdit with a callback", () => {
+                
+            });
 
+            it("should call this._focusInput in the callback of props.onEdit", () => {
+                
             });
             
         });
@@ -307,8 +315,8 @@ describe("components/Blacklist/Word", () => {
                 method = instance._onRemoveClick.bind(instance);
             });
 
-            it("should work", () => {
-
+            it("should call props.blacklist.del with the value of props.word", () => {
+                
             });
             
         });
@@ -320,8 +328,16 @@ describe("components/Blacklist/Word", () => {
                 method = instance._onSaveClick.bind(instance);
             });
 
-            it("should work", () => {
+            it("should call blacklist.validate to ensure the newly inputted word is valid", () => {
+                
+            });
 
+            it("should call blacklist.update if the new word is valid", () => {
+                
+            });
+
+            it("should call this._focusInput if the new word is invalid", () => {
+                
             });
             
         });
