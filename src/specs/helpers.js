@@ -35,8 +35,21 @@ function arrayToObject(arr, val = null) {
     }, {});
 }
 
+function getNestedElements(Component, baseProps = {}, func) {
+    return function(props = {}) {
+        var combinedProps = Object.assign({}, baseProps, props);
+        var component = renderComponent(Component, combinedProps);
+
+        if (func)
+            return func(component);
+
+        return component;
+    };
+}
+
 export default {
     renderComponent,
     getMockBlacklist,
-    arrayToObject
+    arrayToObject,
+    getNestedElements
 };

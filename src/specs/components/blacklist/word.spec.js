@@ -1,6 +1,6 @@
 import { PropTypes } from "react";
 import $ from "react-shallow-query";
-import { renderComponent, getMockBlacklist, arrayToObject } from "../../helpers";
+import { renderComponent, getMockBlacklist, getNestedElements } from "../../helpers";
 
 // Little helper that returns a valid props object.
 function getModuleProps(props = {}) {
@@ -13,18 +13,6 @@ function getModuleProps(props = {}) {
         word: "",
         mode: "view",
         ...props
-    };
-}
-
-function getNestedElements(Module, func) {
-    return function(props) {
-        var moduleProps = getModuleProps(props);
-        var component = renderComponent(Module, moduleProps);
-
-        if (!func)
-            return component;
-
-        return func(component);
     };
 }
 
@@ -89,7 +77,7 @@ describe("components/Blacklist/Word", () => {
             var renderRoot;
 
             beforeEach(() => {
-                renderRoot = getNestedElements(Module);
+                renderRoot = getNestedElements(Module, getModuleProps());
             });
 
             it("should be of type 'ListGroupItem'", () => {
@@ -135,7 +123,7 @@ describe("components/Blacklist/Word", () => {
             var renderControls;
 
             beforeEach(() => {
-                renderControls = getNestedElements(Module, (component) => {
+                renderControls = getNestedElements(Module, getModuleProps(), (component) => {
                     var {output, instance} = component;
                     
                     return {
@@ -210,7 +198,7 @@ describe("components/Blacklist/Word", () => {
             var renderContent;
 
             beforeEach(() => {
-                renderContent = getNestedElements(Module, (component) => {
+                renderContent = getNestedElements(Module, getModuleProps(), (component) => {
                     var {output, instance} = component;
                     
                     return {
