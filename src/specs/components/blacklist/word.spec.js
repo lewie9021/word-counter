@@ -240,7 +240,7 @@ describe("components/Blacklist/Word", () => {
 
     });
 
-    xdescribe("methods", () => {
+    describe("methods", () => {
         var instance, moduleProps;
         
         beforeEach(() => {
@@ -256,7 +256,31 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should call this.setState with values props.mode and props.word", () => {
+                var spy = sandbox.spy();
+
+                sandbox.stub(instance, "setState", spy);
+
+                moduleProps.mode = "view";
+                moduleProps.word = "Hello";
                 
+                method(moduleProps);
+                
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([{
+                    mode: moduleProps.mode,
+                    word: moduleProps.word
+                }]);
+
+                moduleProps.mode = "edit";
+                moduleProps.word = "World";
+                
+                method(moduleProps);
+                
+                expect(spy.callCount).to.eq(2);
+                expect(spy.secondCall.args).to.eql([{
+                    mode: moduleProps.mode,
+                    word: moduleProps.word
+                }]);
             });
             
         });
@@ -269,11 +293,57 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should call React.findDOMNode with the value of this.refs.input", () => {
+                var spy = sandbox.spy();
+                
+                instance.refs = {
+                    input: "WordInput"
+                };
+                
+                // Rewire React.findDOMNode
+                Module.__Rewire__("React", {
+                    findDOMNode: (...args) => {
+                        spy(...args);
 
+                        return {
+                            childNodes: [{
+                                focus: () => {}
+                            }]
+                        };
+                    }
+                });
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([instance.refs.input]);
+                
+                Module.__ResetDependency__("React");
             });
 
             it("should call focus on the DOM element referenced at this.refs.input", () => {
+                var spy = sandbox.spy();
                 
+                instance.refs = {
+                    input: "WordInput"
+                };
+                
+                // Rewire React.findDOMNode
+                Module.__Rewire__("React", {
+                    findDOMNode: (...args) => {
+                        return {
+                            childNodes: [{
+                                focus: spy
+                            }]
+                        };
+                    }
+                });
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args.length).to.eql(0);
+                
+                Module.__ResetDependency__("React");
             });
             
         });
@@ -286,7 +356,21 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should call this.setState of 'word' with the value of e.target.value", () => {
+                var spy = sandbox.spy();
+                var event = {
+                    target: {
+                        value: "Hello"
+                    }
+                };
                 
+                sandbox.stub(instance, "setState", spy);
+
+                method(event);
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([{
+                    word: event.target.value
+                }]);
             });
             
         });
@@ -299,11 +383,29 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should call props.onEdit with a callback", () => {
+                var spy = sandbox.spy();
                 
+                sandbox.stub(instance.props, "onEdit", spy);
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args.length).to.eql(1);
+                expect(spy.firstCall.args[0]).to.be.a("function");
             });
 
             it("should call this._focusInput in the callback of props.onEdit", () => {
-                
+                var spy = sandbox.spy();
+
+                sandbox.stub(instance, "_focusInput", spy);
+                sandbox.stub(instance.props, "onEdit", (callback) => {
+                    callback();
+                });
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args.length).to.eql(0);
             });
             
         });
@@ -316,7 +418,23 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should call props.blacklist.del with the value of props.word", () => {
+                var spy = sandbox.spy();
+                var {props} = instance;
+
+                props.blacklist.del = spy;
+                props.word = "Hello";
+
+                method();
                 
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([props.word]);
+
+                props.word = "World";
+
+                method();
+                
+                expect(spy.callCount).to.eq(2);
+                expect(spy.secondCall.args).to.eql([props.word]);
             });
             
         });
@@ -329,15 +447,52 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should call blacklist.validate to ensure the newly inputted word is valid", () => {
+                var spy = sandbox.spy();
+                var {props, state} = instance;
                 
+                props.blacklist.update = () => {};
+                props.word = "Hello";
+                state.word = "World";
+                
+                sandbox.stub(props.blacklist, "validate", (...args) => {
+                    spy(...args);
+                    
+                    return "success";
+                });
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([props.word, state.word]);
             });
 
             it("should call blacklist.update if the new word is valid", () => {
+                var spy = sandbox.spy();
+                var {props, state} = instance;
                 
+                props.blacklist.update = spy;
+                props.word = "Hello";
+                state.word = "World";
+
+                sandbox.stub(props.blacklist, "validate").returns("success");
+
+                method();
+                
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args).to.eql([props.word, state.word]);
             });
 
             it("should call this._focusInput if the new word is invalid", () => {
-                
+                var spy = sandbox.spy();
+                var {blacklist} = instance.props;
+
+                sandbox.stub(instance, "_focusInput", spy);
+                sandbox.stub(blacklist, "validate").returns("error");
+
+                method();
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.args.length).to.eq(0);
             });
             
         });

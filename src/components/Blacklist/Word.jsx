@@ -46,7 +46,7 @@ class Word extends Component {
 
     _onEditClick = () => {
         this.props.onEdit(() => {
-            this.focusInput();
+            this._focusInput();
         });
     }
     
