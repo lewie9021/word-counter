@@ -21,7 +21,7 @@ class App extends Component {
         });
         
         this.state = {
-            ...Parser(""),
+            ...Parser(props.input || ""),
             showModal: false
         };
     }

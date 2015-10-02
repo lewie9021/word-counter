@@ -1,9 +1,11 @@
 import React from "react/addons";
 import $ from "react-shallow-query";
+import Parser from "../../app/Parser";
+import { renderComponent, getNestedElements } from "../helpers";
 
 describe("components/App", () => {
     var Module, sandbox;
-    
+
     beforeEach(() => {
         Module = require("../../components/App");
         
@@ -13,84 +15,95 @@ describe("components/App", () => {
     afterEach(() => {
         sandbox.restore();
     });
+
+    describe("instantiation", () => {
+
+        it("should have a displayName of 'App'", () => {
+            expect(Module.displayName).to.eq("App");
+        });
+        
+    });
     
     describe("structure", () => {
-        var shallowRenderer, result, instance;
-
-        beforeEach(() => {
-            // TODO: Put this in a helper function?
-            // e.g. renderComponent(props);
-            var { TestUtils } = React.addons;
-
-            shallowRenderer = TestUtils.createRenderer();
-            shallowRenderer.render(<Module />);
-            
-            result = shallowRenderer.getRenderOutput();
-
-            // TODO: Not overly happy about this.
-            instance = shallowRenderer._instance._instance;
-        });
 
         describe("navbar", () => {
-            var $navbar;
+            var renderNavbar;
 
             beforeEach(() => {
-                var results = $(result, "> Navbar");
-
-                expect(results.length).to.eq(1);
-                
-                $navbar = results[0];
+                renderNavbar = getNestedElements(Module, {}, (component) => {
+                    var {output, instance} = component;
+                    
+                    return {
+                        output: $(output, "> Navbar")[0],
+                        instance
+                    };
+                });
             });
-            
-            it("should contain a Navbar directly under the returned div", () => {
-                expect($navbar._isReactElement).to.eq(true);
+
+            it("should contain a Navbar element directly under the returned div", () => {
+                var $navbar = renderNavbar().output;
+                
+                expect($navbar).to.have.property("_isReactElement", true);
             });
 
             it("should contain a brand element", () => {
+                var $navbar = renderNavbar().output;
                 var $brand = $navbar.props.brand;
 
-                expect($brand._isReactElement).to.eq(true);
+                expect($brand).to.have.property("_isReactElement", true);
                 expect($brand.props).to.have.property("href", "#/");
                 expect($brand.props).to.have.property("children", "Word Counter");
             });
 
             it("should have an inverse property", () => {
+                var $navbar = renderNavbar().output;
+                
                 expect($navbar.props).to.have.property("inverse", true);
             });
 
             it("should contain a button that calls this._onShowBlacklist", () => {
-                var $btn = $($navbar, "> Button")[0];
+                var result = renderNavbar();
+                var {instance} = result;
+                var $navbar = result.output;
+                var $button = $($navbar, "> Button")[0];
                 
-                expect($btn._isReactElement).to.eq(true);
-                expect($btn.props).to.have.property("bsStyle", "info");
-                expect($btn.props).to.have.property("className", "pull-right");
-                expect($btn.props).to.have.property("onClick", instance._onShowBlacklist);
+                expect($button).to.have.property("_isReactElement", true);
+                expect($button.props).to.have.property("bsStyle", "info");
+                expect($button.props).to.have.property("className", "pull-right");
+                expect($button.props).to.have.property("onClick", instance._onShowBlacklist);
             });
             
         });
 
         describe("grid", () => {
-            var $grid;
+            var renderGrid;
 
             beforeEach(() => {
-                var results = $(result, "> Grid");
-
-                expect(results.length).to.eq(1);
-                
-                $grid = results[0];
+                renderGrid = getNestedElements(Module, {}, (component) => {
+                    var {output, instance} = component;
+                    
+                    return {
+                        output: $(output, "> Grid")[0],
+                        instance
+                    };
+                });
             });
             
-            it("should contain a Grid directly under the returned div", () => {
-                expect($grid._isReactElement).to.eq(true);
+            it("should contain a Grid element directly under the returned div", () => {
+                var $grid = renderGrid().output;
+                
+                expect($grid).to.have.property("_isReactElement", true);
             });
 
             it("should contain two Col elements wrapped by a Row element", () => {
+                var $grid = renderGrid().output;
                 var $cols = $($grid, "> Row > Col");
                 
                 expect($cols.length).to.eq(2);
             });
 
             it("should provide props: {xs: 12, md: 8} to the first Col element", () => {
+                var $grid = renderGrid().output;
                 var $col = $($grid, "> Row > Col")[0];
 
                 expect($col.props).to.have.property("xs", 12);
@@ -98,6 +111,7 @@ describe("components/App", () => {
             });
 
             it("should provide props: {xs: 12, md: 4} to the second Col element", () => {
+                var $grid = renderGrid().output;
                 var $col = $($grid, "> Row > Col")[1];
 
                 expect($col.props).to.have.property("xs", 12);
@@ -105,6 +119,9 @@ describe("components/App", () => {
             });
             
             it("should contain a textarea in the first Col element", () => {
+                var result = renderGrid();
+                var {instance} = result;
+                var $grid = result.output;
                 // var $textarea = $($grid, "> Row > Col:nth-child(0) textarea")[0];
                 var $col = $($grid, "> Row > Col")[0];
                 var $textarea = $($col, "textarea")[0];
@@ -116,6 +133,7 @@ describe("components/App", () => {
             });
 
             it("should contain a StatsBucket element titled 'Details' in the second Col element", () => {
+                var $grid = renderGrid().output;
                 // var $statsBucket = $($grid, "> Row > Col:nth-child(1) StatsBucket")[0];
                 var $col = $($grid, "> Row > Col")[1];
                 var $statsBucket = $($col, "StatsBucket")[0];
@@ -123,34 +141,51 @@ describe("components/App", () => {
                 expect($statsBucket.props).to.have.property("title", "Details");
             });
 
-            it("should not intially contain a second StatsBucket element titled 'Word Density'", () => {
-                // var $col = $($grid, "> Row > Col")[1];
+            it("should contain another StatsBucket element titled 'Word Density' when state.wordDensity > 0", () => {
+                var $grid = renderGrid().output;
                 var $col = $($grid, "> Row > Col")[1];
+                var $statsBucket;
 
                 expect($col.props.children[1]).to.be.null;
+
+                $grid = renderGrid({input: "Hello World"}).output;
+                $col = $($grid, "> Row > Col")[1];
+                $statsBucket = $($col, "StatsBucket")[1];
+
+                expect($statsBucket.props).to.have.property("title", "Word Density");
             });
             
         });
 
         describe("blacklist-modal", () => {
-            var $modal;
+            var renderModal;
 
             beforeEach(() => {
-                var results = $(result, "> BlacklistModal");
-
-                expect(results.length).to.eq(1);
-                
-                $modal = results[0];
+                renderModal = getNestedElements(Module, {}, (component) => {
+                    var {output, instance} = component;
+                    
+                    return {
+                        output: $(output, "> BlacklistModal")[0],
+                        instance
+                    };
+                });
             });
             
             it("should contain a BlacklistModal directly under the returned div", () => {
-                expect($modal._isReactElement).to.eq(true);
+                var result = renderModal();
+                var {instance} = result;
+                var $modal = result.output;
+                
+                expect($modal).to.have.property("_isReactElement", true);
                 expect($modal.props).to.have.property("showModal", instance.state.showModal);
                 expect($modal.props).to.have.property("onHide", instance._onHideBlacklist);
             });
 
             it("should be passed an instance of Blacklist to enable functionality", () => {
                 var Blacklist = require("../../app/Blacklist");
+                var result = renderModal();
+                var {instance} = result;
+                var $modal = result.output;
                 
                 expect($modal.props).to.have.property("blacklist", instance.blacklist);
                 expect($modal.props.blacklist).to.be.an.instanceof(Blacklist);
@@ -164,7 +199,7 @@ describe("components/App", () => {
         var instance;
 
         beforeEach(() => {
-            instance = new Module();
+            instance = new Module({});
         });
         
         describe("onTextAreaChange", () => {
@@ -175,26 +210,33 @@ describe("components/App", () => {
             });
             
             it("should pass the value of the textarea to the Parser module", () => {
-                var event = {target: {value: "Hello world!"}};
                 var spy = sandbox.spy();
+                var event = {
+                    target: {
+                        value: "Hello world!"}
+                };
 
                 // Rewire the Parser to spy on it.
                 Module.__Rewire__("Parser", spy);
                 
                 method(event);
 
-                expect(spy.firstCall.args[0]).to.eql(event.target.value);
+                expect(spy.firstCall.args).to.eql([event.target.value]);
 
                 // Revert the change.
                 Module.__ResetDependency__("Parser");
             });
 
             it("should pass the returned value of the Parser module to this.setState", () => {
-                var event = {target: {value: "Hello world!"}};
                 var spy = sandbox.spy();
                 var stats = {
                     details: "details",
                     wordDensity: "wordDensity"
+                };
+                var event = {
+                    target: {
+                        value: "Hello world!"
+                    }
                 };
 
                 // Rewire the Parser to spy on it.
@@ -205,7 +247,7 @@ describe("components/App", () => {
                 
                 method(event);
 
-                expect(spy.firstCall.args[0]).to.eql(stats);
+                expect(spy.firstCall.args).to.eql([stats]);
 
                 // Revert the change.
                 Module.__ResetDependency__("Parser");
@@ -228,9 +270,9 @@ describe("components/App", () => {
 
                 method();
                 
-                expect(spy.firstCall.args[0]).to.eql({
+                expect(spy.firstCall.args).to.eql([{
                     showModal: true
-                });
+                }]);
             });
             
         });
