@@ -34,6 +34,7 @@ module.exports = function(buildMode) {
         },
 
         resolve: {
+            root: Path.join(rootPath, "src"),
             extensions: ["", ".js", ".jsx", ".scss", ".css"]
         }
     });
