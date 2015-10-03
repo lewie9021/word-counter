@@ -202,7 +202,7 @@ describe("components/App", () => {
             instance = new Module({});
         });
         
-        describe("onTextAreaChange", () => {
+        describe("_onTextAreaChange", () => {
             var method;
 
             beforeEach(() => {
@@ -255,7 +255,7 @@ describe("components/App", () => {
             
         });
 
-        describe("onShowBlacklist", () => {
+        describe("_onShowBlacklist", () => {
             var method;
 
             beforeEach(() => {
@@ -277,7 +277,7 @@ describe("components/App", () => {
             
         });
 
-        describe("onHideBlacklist", () => {
+        describe("_onHideBlacklist", () => {
             var method;
 
             beforeEach(() => {
@@ -295,6 +295,34 @@ describe("components/App", () => {
                 expect(spy.firstCall.args[0]).to.eql({
                     showModal: false
                 });
+            });
+            
+        });
+
+        describe("_mapStatsDetails", () => {
+            var method;
+
+            beforeEach(() => {
+                method = instance._mapStatsDetails.bind(instance);
+            });
+            
+            it("should iterate over each key in 'details'", () => {
+                var spy = sandbox.spy();
+                
+                sandbox.stub(Array.prototype, "reduce", spy);
+
+                method({a: 1, b: 2, c: 3});
+
+                expect(spy.callCount).to.eq(1);
+                expect(spy.firstCall.thisValue).to.eql(["a", "b", "c"]);
+            });
+
+            xit("should return an array with a length identical to the number of properties in 'details'", () => {
+                
+            });
+            
+            xit("should return an array of objects with the properties 'key', 'name', and 'value'", () => {
+                
             });
             
         });

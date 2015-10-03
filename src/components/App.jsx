@@ -4,6 +4,7 @@ import Parser from "app/parser";
 import Blacklist from "app/Blacklist";
 import BlacklistModal from "./Blacklist/Modal"
 import StatsBucket from "./StatsBucket";
+import PARSER_DETAILS from "constants/ParserDetails";
 
 class App extends Component {
 
@@ -43,6 +44,18 @@ class App extends Component {
         this.setState({
             showModal: false
         });
+    }
+
+    _mapStatsDetails = (details) => {
+        var keys = Object.keys(details);
+
+        return keys.reduce((stats, key, index) => {
+            stats.push({
+                key: index,
+                name: key,
+                value: stats[key]
+            })
+        }, []);
     }
 
     render() {
