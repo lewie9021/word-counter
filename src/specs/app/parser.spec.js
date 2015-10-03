@@ -2,7 +2,7 @@ describe("app/parser", function() {
     var Module, sandbox;
 
     beforeEach(() => {
-        Module = require("../../app/Parser");
+        Module = require("app/Parser");
         sandbox = sinon.sandbox.create();
     });
 
@@ -94,7 +94,7 @@ describe("app/parser", function() {
                     });
                     
                     it("should contain the keys defined in constants/ParserDetails", () => {
-                        var keys = Object.keys(require("../../constants/ParserDetails"));
+                        var keys = Object.keys(require("constants/ParserDetails"));
 
                         expect(Object.keys(details).length).to.eq(keys.length);
                         keys.forEach((key) => {

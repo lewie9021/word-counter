@@ -1,13 +1,13 @@
 import React from "react/addons";
 import $ from "react-shallow-query";
-import Parser from "../../app/Parser";
-import { renderComponent, getNestedElements } from "../helpers";
+import Parser from "app/Parser";
+import { renderComponent, getNestedElements } from "specs/helpers";
 
 describe("components/App", () => {
     var Module, sandbox;
 
     beforeEach(() => {
-        Module = require("../../components/App");
+        Module = require("components/App");
         
         sandbox = sinon.sandbox.create();
     });

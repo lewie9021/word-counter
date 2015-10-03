@@ -1,11 +1,11 @@
 import $ from "react-shallow-query";
-import { renderComponent } from "../../helpers";
+import { renderComponent } from "specs/helpers";
 
 describe("components/Blacklist/Modal", () => {
     var Module, sandbox;
-    
+
     beforeEach(() => {
-        Module = require("../../../components/Blacklist/Modal");
+        Module = require("components/Blacklist/Modal");
         
         sandbox = sinon.sandbox.create();
     });
@@ -95,7 +95,7 @@ describe("components/Blacklist/Modal", () => {
             });
             
             it("should contain a custom 'Words' element", () => {
-                var Words = require("../../../components/Blacklist/Words");
+                var Words = require("components/Blacklist/Words");
                 var $words = $($body, "> BlacklistWords")[0];
 
                 expect($words).to.have.property("_isReactElement", true);
@@ -125,7 +125,7 @@ describe("components/Blacklist/Modal", () => {
             });
             
             it("should contain a custom 'NewWord' element", () => {
-                var NewWord = require("../../../components/Blacklist/NewWord");
+                var NewWord = require("components/Blacklist/NewWord");
                 var $newWord = $($footer, "> BlacklistNewWord")[0];
 
                 expect($newWord).to.have.property("_isReactElement", true);

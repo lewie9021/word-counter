@@ -1,6 +1,6 @@
 import { PropTypes } from "react";
 import $ from "react-shallow-query";
-import { renderComponent, getMockBlacklist, getNestedElements } from "../../helpers";
+import { renderComponent, getMockBlacklist, getNestedElements } from "specs/helpers";
 
 // Little helper that returns a valid props object.
 function getModuleProps(props = {}) {
@@ -18,9 +18,9 @@ function getModuleProps(props = {}) {
 
 describe("components/Blacklist/Word", () => {
     var Module, sandbox;
-    
+
     beforeEach(() => {
-        Module = require("../../../components/Blacklist/Word");
+        Module = require("components/Blacklist/Word");
         
         sandbox = sinon.sandbox.create();
     });
@@ -217,7 +217,7 @@ describe("components/Blacklist/Word", () => {
             });
 
             it("should render a 'WordInput' given the mode 'edit'", () => {
-                var WordInput = require("../../../components/Blacklist/WordInput");
+                var WordInput = require("components/Blacklist/WordInput");
                 var $content = renderContent({mode: "edit"}).output;
                 var $wordInput = $content.props.children;
 

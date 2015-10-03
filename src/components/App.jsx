@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Button, Grid, Row, Col } from "react-bootstrap";
-import Parser from "../app/Parser";
-import Blacklist from "../app/Blacklist";
+import Parser from "app/Parser";
+import Blacklist from "app/Blacklist";
 import BlacklistModal from "./Blacklist/Modal"
 import StatsBucket from "./StatsBucket";
 

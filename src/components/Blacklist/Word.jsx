@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from "react";
 import { ListGroupItem, Button, Glyphicon } from "react-bootstrap";
-import CONTROLS from "../../constants/Controls";
+import CONTROLS from "constants/Controls";
 import WordInput from "./WordInput";
 
 class Word extends Component {

@@ -1,11 +1,11 @@
 import $ from "react-shallow-query";
-import { renderComponent } from "../helpers";
+import { renderComponent } from "specs/helpers";
 
 describe("components/StatsBucket", () => {
     var Module, sandbox;
-    
+
     beforeEach(() => {
-        Module = require("../../components/StatsBucket");
+        Module = require("components/StatsBucket");
         
         sandbox = sinon.sandbox.create();
     });

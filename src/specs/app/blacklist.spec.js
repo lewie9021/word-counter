@@ -1,8 +1,8 @@
 describe("app/Blacklist", function() {
     var Module, sandbox;
-
+    
     beforeEach(() => {
-        Module = require("../../app/Blacklist");
+        Module = require("app/Blacklist");
         sandbox = sinon.sandbox.create();
     });
 

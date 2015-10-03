@@ -1,12 +1,12 @@
 import { PropTypes } from "react";
 import $ from "react-shallow-query";
-import { renderComponent, getMockBlacklist, arrayToObject } from "../../helpers";
+import { renderComponent, getMockBlacklist, arrayToObject } from "specs/helpers";
 
 describe("components/Blacklist/Words", () => {
     var Module, sandbox;
-    
+
     beforeEach(() => {
-        Module = require("../../../components/Blacklist/Words");
+        Module = require("components/Blacklist/Words");
         
         sandbox = sinon.sandbox.create();
     });
