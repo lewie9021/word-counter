@@ -1,6 +1,6 @@
 import React from "react/addons";
 import $ from "react-shallow-query";
-import Parser from "app/Parser";
+import Parser from "app/parser";
 import { renderComponent, getNestedElements } from "specs/helpers";
 
 describe("components/App", () => {

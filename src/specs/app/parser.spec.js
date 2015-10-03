@@ -2,7 +2,7 @@ describe("app/parser", function() {
     var Module, sandbox;
 
     beforeEach(() => {
-        Module = require("app/Parser");
+        Module = require("app/parser");
         sandbox = sinon.sandbox.create();
     });
 
