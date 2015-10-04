@@ -345,7 +345,7 @@ describe("components/App", () => {
                 });
             });
 
-            it("should for each key in 'stats', use source[key] for the returned 'value' properties", () => {
+            it("should for each key in 'stats', use source[key] for the returned 'name' properties", () => {
                 var source = {
                     a: "A",
                     b: "B",
@@ -362,7 +362,23 @@ describe("components/App", () => {
                 result.forEach((stat, index) => {
                     var statsKey = keys[index];
                     
-                    expect(stat).to.have.property("value", source[statsKey]);
+                    expect(stat).to.have.property("name", source[statsKey]);
+                });
+            });
+
+            it("should assign stats[key] for the returned 'value' properties", () => {
+                var stats = {
+                    a: 1,
+                    b: 2,
+                    b: 3
+                };
+                var result = method(stats);
+                var keys = Object.keys(stats);
+                
+                result.forEach((stat, index) => {
+                    var statsKey = keys[index];
+                    
+                    expect(stat).to.have.property("value", stats[statsKey]);
                 });
             });
 

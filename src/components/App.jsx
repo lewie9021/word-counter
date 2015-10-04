@@ -49,14 +49,14 @@ class App extends Component {
     _mapStats = (stats, source = stats) => {
         var keys = Object.keys(stats);
 
-        return keys.reduce((stats, key, index) => {
-            stats.push({
+        return keys.reduce((array, key, index) => {
+            array.push({
                 key: index,
-                name: key,
-                value: source[key]
+                name: source[key],
+                value: stats[key]
             });
 
-            return stats;
+            return array;
         }, []);
     }
 
