@@ -46,15 +46,17 @@ class App extends Component {
         });
     }
 
-    _mapStatsDetails = (details) => {
-        var keys = Object.keys(details);
+    _mapStats = (stats, source = stats) => {
+        var keys = Object.keys(stats);
 
         return keys.reduce((stats, key, index) => {
             stats.push({
                 key: index,
                 name: key,
-                value: stats[key]
-            })
+                value: source[key]
+            });
+
+            return stats;
         }, []);
     }
 
@@ -88,7 +90,7 @@ class App extends Component {
                               onChange={this._onTextAreaChange} />
                         </Col>
                         <Col xs={12} md={4}>
-                            <StatsBucket title="Details" stats={details} />
+                            <StatsBucket title="Details" stats={this._mapStats(details, PARSER_DETAILS)} />
                             {/* Only show the word density bucket when there are words to show. */}
                             {wordDensity.length ? <StatsBucket title="Word Density" stats={wordDensity} /> : null}
                         </Col>

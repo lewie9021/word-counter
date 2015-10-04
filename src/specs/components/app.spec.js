@@ -299,11 +299,11 @@ describe("components/App", () => {
             
         });
 
-        describe("_mapStatsDetails", () => {
+        describe("_mapStats", () => {
             var method;
 
             beforeEach(() => {
-                method = instance._mapStatsDetails.bind(instance);
+                method = instance._mapStats.bind(instance);
             });
             
             it("should iterate over each key in 'details'", () => {
@@ -317,12 +317,69 @@ describe("components/App", () => {
                 expect(spy.firstCall.thisValue).to.eql(["a", "b", "c"]);
             });
 
-            xit("should return an array with a length identical to the number of properties in 'details'", () => {
-                
+            it("should return an array with a length identical to the number of properties in 'details'", () => {
+                var stats = {
+                    a: 1,
+                    b: 2,
+                    c: 3
+                };
+                var result = method(stats);
+
+                expect(Array.isArray(result)).to.eq(true);
+                expect(result.length).to.eq(Object.keys(stats).length);
             });
             
-            xit("should return an array of objects with the properties 'key', 'name', and 'value'", () => {
+            it("should return an array of objects with the properties 'key', 'name', and 'value'", () => {
+                var stats = {
+                    a: 1,
+                    b: 2,
+                    c: 3
+                };
+                var result = method(stats);
+
+                result.forEach((stat) => {
+                    expect(stat).to.have.property("key");
+                    expect(stat).to.have.property("name");
+                    expect(stat).to.have.property("value");
+                    expect(Object.keys(stat).length).to.eq(3);
+                });
+            });
+
+            it("should for each key in 'stats', use source[key] for the returned 'value' properties", () => {
+                var source = {
+                    a: "A",
+                    b: "B",
+                    c: "C"
+                };
+                var stats = {
+                    a: 1,
+                    b: 2,
+                    b: 3
+                };
+                var result = method(stats, source);
+                var keys = Object.keys(stats);
                 
+                result.forEach((stat, index) => {
+                    var statsKey = keys[index];
+                    
+                    expect(stat).to.have.property("value", source[statsKey]);
+                });
+            });
+
+            it("should default 'source' to 'stats'", () => {
+                var stats = {
+                    a: 1,
+                    b: 2,
+                    b: 3
+                };
+                var result = method(stats);
+                var keys = Object.keys(stats);
+                
+                result.forEach((stat, index) => {
+                    var statsKey = keys[index];
+                    
+                    expect(stat).to.have.property("value", stats[statsKey]);
+                });
             });
             
         });
