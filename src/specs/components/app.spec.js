@@ -114,6 +114,7 @@ describe("components/App", () => {
                 var $grid = renderGrid().output;
                 var $col = $($grid, "> Row > Col")[1];
 
+                expect($col.props).to.have.property("className", "stats-container");
                 expect($col.props).to.have.property("xs", 12);
                 expect($col.props).to.have.property("md", 4);
             });

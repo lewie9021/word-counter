@@ -92,7 +92,7 @@ class App extends Component {
                               placeholder="Enter text here..."
                               onChange={this._onTextAreaChange} />
                         </Col>
-                        <Col xs={12} md={4}>
+                        <Col className="stats-container" xs={12} md={4}>
                             <StatsBucket title="Details" stats={details} />
                             {/* Only show the word density bucket when there are words to show. */}
                             {wordDensity.length ? <StatsBucket title="Word Density" stats={wordDensity} /> : null}

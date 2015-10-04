@@ -74,16 +74,16 @@ describe("components/StatsBucket", () => {
                 
             });
 
-            it("should render stat.name in a span", () => {
+            it("should render stat.name in a div", () => {
                 var {output} = renderComponent(Module, {
                     title: "Hello World",
                     stats: [1, 2, 3].map((key) => ({key, name: "stat" + key}))
                 });
                 
                 $(output, "> ListGroup > ListGroupItem").forEach(($item, index) => {
-                    var $span = $($item, "> span")[0];
+                    var $div = $($item, "> div")[0];
 
-                    expect($span.props).to.have.property("children", "stat" + (index + 1));
+                    expect($div.props).to.have.property("children", "stat" + (index + 1));
                 });
             });
             

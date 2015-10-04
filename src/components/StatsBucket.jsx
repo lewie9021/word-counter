@@ -21,8 +21,8 @@ class StatsBucket extends Component {
             
             return (
                 <ListGroupItem key={key}>
-                    <span>{name}</span>
                     <Badge pullRight={true}>{value}</Badge>
+                    <div className="name">{name}</div>
                 </ListGroupItem>
             );
         });
