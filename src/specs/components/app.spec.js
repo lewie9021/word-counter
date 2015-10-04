@@ -127,7 +127,7 @@ describe("components/App", () => {
                 var $textarea = $($col, "textarea")[0];
 
                 expect($textarea.props).to.have.property("className", "form-control");
-                expect($textarea.props).to.have.property("rows", 10);
+                expect($textarea.props).to.have.property("rows", 12);
                 expect($textarea.props).to.have.property("placeholder", "Enter text here...");
                 expect($textarea.props).to.have.property("onChange", instance._onTextAreaChange);
             });

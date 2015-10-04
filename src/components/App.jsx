@@ -88,7 +88,7 @@ class App extends Component {
                         <Col xs={12} md={8}>
                             <textarea
                               className="form-control"
-                              rows={10}
+                              rows={12}
                               placeholder="Enter text here..."
                               onChange={this._onTextAreaChange} />
                         </Col>
