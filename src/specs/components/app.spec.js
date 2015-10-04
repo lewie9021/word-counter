@@ -337,15 +337,15 @@ describe("components/App", () => {
                 };
                 var result = method(stats);
 
-                result.forEach((stat) => {
-                    expect(stat).to.have.property("key");
+                result.forEach((stat, index) => {
+                    expect(stat).to.have.property("key", index);
                     expect(stat).to.have.property("name");
                     expect(stat).to.have.property("value");
                     expect(Object.keys(stat).length).to.eq(3);
                 });
             });
 
-            it("should for each key in 'stats', use source[key] for the returned 'name' properties", () => {
+            it("should assign source[key] for the returned 'name' properties", () => {
                 var source = {
                     a: "A",
                     b: "B",
