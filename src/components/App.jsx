@@ -61,9 +61,12 @@ class App extends Component {
     }
 
     render() {
-        var {details, wordDensity} = this.state;
         var brand = <a href="#/">Word Counter</a>;
         var blacklist = this.blacklist.get();
+        var details = this._mapStats(this.state.details, PARSER_DETAILS);
+        var wordDensity = this.state.wordDensity.map((word, index) => {
+            return {key: index, ...word};
+        });
 
         // Filter out words that have been blacklisted.
         wordDensity = wordDensity.filter((word) => {
@@ -90,7 +93,7 @@ class App extends Component {
                               onChange={this._onTextAreaChange} />
                         </Col>
                         <Col xs={12} md={4}>
-                            <StatsBucket title="Details" stats={this._mapStats(details, PARSER_DETAILS)} />
+                            <StatsBucket title="Details" stats={details} />
                             {/* Only show the word density bucket when there are words to show. */}
                             {wordDensity.length ? <StatsBucket title="Word Density" stats={wordDensity} /> : null}
                         </Col>
