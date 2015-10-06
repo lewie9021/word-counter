@@ -179,7 +179,7 @@ describe("components/Blacklist/NewWord", () => {
     });
 
     describe("methods", () => {
-        var instance, blacklist;
+        var instance, blacklist, setStateSpy;
         
         beforeEach(() => {
             blacklist = getMockBlacklist();
@@ -189,6 +189,10 @@ describe("components/Blacklist/NewWord", () => {
             };
             
             instance = new Module({blacklist});
+
+            // Stub this.setState with a spy.
+            setStateSpy = sandbox.spy();
+            sandbox.stub(instance, "setState", setStateSpy);
         });
         
         describe("_onAddClick", () => {
@@ -269,14 +273,12 @@ describe("components/Blacklist/NewWord", () => {
             });
 
             it("should only call setState and blacklist.add when the entry is valid", () => {
-                var spy = sandbox.spy(instance, "setState");
-
                 method();
 
-                expect(spy.callCount).to.eq(1);
-                expect(spy.firstCall.args[0]).to.eql({
+                expect(setStateSpy.callCount).to.eq(1);
+                expect(setStateSpy.firstCall.args).to.eql([{
                     word: ""
-                });
+                }]);
             });
 
             it("should pass this.state.word to blacklist.add", () => {
@@ -300,7 +302,6 @@ describe("components/Blacklist/NewWord", () => {
             });
 
             it("should set this.state.word to the value of the changed input element", () => {
-                var spy = sandbox.spy(instance, "setState");
                 var event = {
                     target: {
                         value: "Hello"
@@ -309,8 +310,10 @@ describe("components/Blacklist/NewWord", () => {
 
                 method(event);
 
-                expect(spy.callCount).to.eq(1);
-                expect(spy.firstCall.args[0]).to.eql({word: "Hello"});
+                expect(setStateSpy.callCount).to.eq(1);
+                expect(setStateSpy.firstCall.args).to.eql([{
+                    word: "Hello"
+                }]);
             });
             
         });
