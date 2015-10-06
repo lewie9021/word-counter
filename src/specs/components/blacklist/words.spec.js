@@ -260,13 +260,11 @@ describe("components/Blacklist/Words", () => {
             });
 
             it("should set the 'onEdit' attribute to this._onEdit with the 'word' parameter pre-populated", () => {
+                // Spy on the map method to inspect the sorted words array.
+                var spy = sandbox.spy(Function.prototype, "bind");
                 var sortedWords = words.sort();
-                var spy = sandbox.spy();
                 var wordElements;
                 
-                // Spy on the map method to inspect the sorted words array.
-                sandbox.stub(Function.prototype, "bind", spy);
-
                 wordElements = method(blacklist, null);
 
                 expect(spy.callCount).to.eq(3);
