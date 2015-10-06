@@ -183,7 +183,7 @@ describe("components/App", () => {
             });
 
             it("should be passed an instance of Blacklist to enable functionality", () => {
-                var Blacklist = require("../../app/Blacklist");
+                var Blacklist = require("app/Blacklist");
                 var result = renderModal();
                 var {instance} = result;
                 var $modal = result.output;
@@ -197,26 +197,35 @@ describe("components/App", () => {
     });
 
     describe("methods", () => {
-        var instance;
+        var instance, setStateSpy;
 
         beforeEach(() => {
             instance = new Module({});
+            
+            // Stub this.setState with a spy.
+            setStateSpy = sandbox.spy();
+            sandbox.stub(instance, "setState", setStateSpy);
         });
         
         describe("_onTextAreaChange", () => {
-            var method;
+            var method, event, stats;
 
             beforeEach(() => {
                 method = instance._onTextAreaChange.bind(instance);
+                event = {
+                    target: {
+                        value: "Hello world!"
+                    }
+                };
+                stats = {
+                    details: "details",
+                    wordDensity: "wordDensity"
+                };
             });
             
             it("should pass the value of the textarea to the Parser module", () => {
                 var spy = sandbox.spy();
-                var event = {
-                    target: {
-                        value: "Hello world!"}
-                };
-
+                
                 // Rewire the Parser to spy on it.
                 Module.__Rewire__("Parser", spy);
                 
@@ -229,26 +238,12 @@ describe("components/App", () => {
             });
 
             it("should pass the returned value of the Parser module to this.setState", () => {
-                var spy = sandbox.spy();
-                var stats = {
-                    details: "details",
-                    wordDensity: "wordDensity"
-                };
-                var event = {
-                    target: {
-                        value: "Hello world!"
-                    }
-                };
-
                 // Rewire the Parser to spy on it.
                 Module.__Rewire__("Parser", () => stats);
 
-                // Stub this.setState.
-                sandbox.stub(instance, "setState", spy);
-                
                 method(event);
 
-                expect(spy.firstCall.args).to.eql([stats]);
+                expect(setStateSpy.firstCall.args).to.eql([stats]);
 
                 // Revert the change.
                 Module.__ResetDependency__("Parser");
@@ -264,14 +259,9 @@ describe("components/App", () => {
             });
             
             it("should set the component's state property 'showModal' to true", () => {
-                var spy = sandbox.spy();
-                
-                // Stub this.setState.
-                sandbox.stub(instance, "setState", spy);
-
                 method();
                 
-                expect(spy.firstCall.args).to.eql([{
+                expect(setStateSpy.firstCall.args).to.eql([{
                     showModal: true
                 }]);
             });
@@ -286,14 +276,9 @@ describe("components/App", () => {
             });
             
             it("should set the component's state property 'showModal' to false", () => {
-                var spy = sandbox.spy();
-                
-                // Stub this.setState.
-                sandbox.stub(instance, "setState", spy);
-
                 method();
                 
-                expect(spy.firstCall.args[0]).to.eql({
+                expect(setStateSpy.firstCall.args[0]).to.eql({
                     showModal: false
                 });
             });
