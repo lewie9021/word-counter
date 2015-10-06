@@ -59,20 +59,45 @@ class App extends Component {
             return array;
         }, []);
     }
+    
+    _sortWordDensity = (wordDensity, count = 5) => {
+        return wordDensity.sort((a, b) => {
+            if (a.value < b.value)
+                return 1;
+            
+            if (a.value > b.value)
+                return -1;
+
+            if (a.name < b.name)
+                return -1;
+
+            if (a.name > b.name)
+                return 1;
+            
+            return 0;
+        }).slice(0, count);
+    }
+
+    _filterBlacklistedWords = (wordDensity) => {
+        var blacklist = this.blacklist.get();
+
+        // Filter out words that have been blacklisted.
+        return wordDensity.filter((word) => {
+            return !(word.name in blacklist);
+        });
+    }
 
     render() {
         var brand = <a href="#/">Word Counter</a>;
         var blacklist = this.blacklist.get();
         var details = this._mapStats(this.state.details, PARSER_DETAILS);
-        var wordDensity = this.state.wordDensity.map((word, index) => {
+        var wordDensity = this._filterBlacklistedWords(this.state.wordDensity);
+
+        // Get the top 10 words before adding a 'key' property to each word.
+        wordDensity = this._sortWordDensity(wordDensity, 10).map((word, index) => {
             return {key: index, ...word};
         });
-
-        // Filter out words that have been blacklisted.
-        wordDensity = wordDensity.filter((word) => {
-            return !(word.name in blacklist);
-        });
-
+        
         return (
             <div>
                 <Navbar brand={brand} inverse>

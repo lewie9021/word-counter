@@ -3,6 +3,13 @@ import $ from "react-shallow-query";
 import Parser from "app/parser";
 import { renderComponent, getNestedElements } from "specs/helpers";
 
+function generateInput() {
+    // Generate an input of letters A-Z.
+    return Array.from(Array(26).keys()).map((x, i) => {
+        return String.fromCharCode(65 + i);
+    });
+}
+
 describe("components/App", () => {
     var Module, sandbox;
 
@@ -154,6 +161,36 @@ describe("components/App", () => {
                 $statsBucket = $($col, "StatsBucket")[1];
 
                 expect($statsBucket.props).to.have.property("title", "Word Density");
+            });
+
+            it("should sort state.wordDensity by value and then name alphabetically", () => {
+                var input = generateInput().reverse();
+                var expected = generateInput()
+                        .filter((letter) => letter !== "C")
+                        .map((letter) => letter.toLowerCase());
+
+                // Add a duplicate letter to ensure value is respected over name.
+                input.push("C");
+                expected.unshift("c");
+
+                var $grid = renderGrid({input: input.join(" ")}).output;
+                var $col = $($grid, "> Row > Col")[1];
+                var $statsBucket = $($col, "StatsBucket")[1];
+
+                $statsBucket.props.stats.forEach((state, index) => {
+                    expect(state.name).to.eq(expected[index]);
+                });
+            });
+
+            it("should only pass the top 10 words to the 'Word Density' StatsBucket", () => {
+                // Generate an input of letters A-Z.
+                var input = generateInput().join(" ");
+
+                var $grid = renderGrid({input}).output;
+                var $col = $($grid, "> Row > Col")[1];
+                var $statsBucket = $($col, "StatsBucket")[1];
+
+                expect($statsBucket.props.stats.length).to.eq(10);
             });
             
         });
