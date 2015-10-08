@@ -97,8 +97,8 @@ class Blacklist extends EventEmitter {
         var identical = (oldInput && input == oldInput);
         // Doesn't already exist in the blacklist.
         var duplicate = (!identical && input in this.get());
-        // Ensure the string only contains letters.
-        var match = input.match(/[A-Z]+/i);
+        // Ensure the string has a valid format.
+        var match = input.match(/('?[\w-]+'?)+/);
 
         // Not an empty string, doesn't already exist, and only contains letters.
         if (input.length && !duplicate && (match && match[0] == input))

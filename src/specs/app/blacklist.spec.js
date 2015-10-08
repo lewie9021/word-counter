@@ -1,4 +1,4 @@
-describe("app/Blacklist", function() {
+describe.only("app/Blacklist", function() {
     var Module, sandbox;
     
     beforeEach(() => {
@@ -425,7 +425,7 @@ describe("app/Blacklist", function() {
                 blacklist._blacklist = {};
             });
             
-            it("should call match on 'input' using /[A-Z]+/i to ensure it only contains letters", () => {
+            it("should call match on 'input' using /('?[\\w-]+'?)+/ to mirror the parser's 'getWords' function", () => {
                 var spy = sandbox.spy();
                 var input = "hello";
 
@@ -442,7 +442,7 @@ describe("app/Blacklist", function() {
                 expect(thisValue).to.eql(input);
 
                 // Ensure the method has been passed the correct regex pattern.
-                expect(args[0].toString()).to.eql("/[A-Z]+/i");
+                expect(args[0].toString()).to.eql("/('?[\\w-]+'?)+/");
             });
 
             it("should be invalid if 'input' is empty", () => {
@@ -460,14 +460,17 @@ describe("app/Blacklist", function() {
                 expect(result).to.be.eq("error");
             });
 
-            it("should be invalid if 'input' doesn't match against /[A-Z]+/i", () => {
-                var input = "input1";
-                var match = input.match(/[A-Z]+/i);
-                var result = blacklist.validate(null, input);
+            it("should be invalid if 'input' doesn't match against /('?[\w-]+'?)+/", () => {
+                var invalid = ["", "a;", "b*", "c#", "~d", "%e", ":s"];
 
-                // Ensure it's invalid.
-                expect(match && match[0]).to.not.eq(input);
-                expect(result).to.be.eq("error");
+                invalid.forEach((input) => {
+                    var match = input.match(/('?[\w-]+'?)+/);
+                    var result = blacklist.validate(null, input);
+
+                    // Ensure it's invalid.
+                    expect(match && match[0]).to.not.eq(input);
+                    expect(result).to.be.eq("error");
+                });
             });
 
             it("should be valid if 'oldInput' is identical and 'input' is already in this._blacklist", () => {
@@ -477,6 +480,19 @@ describe("app/Blacklist", function() {
                 result = blacklist.validate("hello", "hello");
 
                 expect(result).to.be.eq("success");
+            });
+
+            it("should be valid if 'input' matches against /('?[\w-]+'?)+/", () => {
+                var valid = ["a", "abc", "1", "a2", "abc123", "hello-world", "don't"];
+
+                valid.forEach((input) => {
+                    var match = input.match(/('?[\w-]+'?)+/);
+                    var result = blacklist.validate(null, input);
+
+                    // Ensure it's valid.
+                    expect(match && match[0]).to.eq(input);
+                    expect(result).to.be.eq("success");
+                });
             });
 
         });
