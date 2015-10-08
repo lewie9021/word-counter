@@ -1,4 +1,4 @@
-describe.only("app/Blacklist", function() {
+describe("app/Blacklist", function() {
     var Module, sandbox;
     
     beforeEach(() => {
@@ -460,7 +460,7 @@ describe.only("app/Blacklist", function() {
                 expect(result).to.be.eq("error");
             });
 
-            it("should be invalid if 'input' doesn't match against /('?[\w-]+'?)+/", () => {
+            it("should be invalid if 'input' doesn't match against /('?[\\w-]+'?)+/", () => {
                 var invalid = ["", "a;", "b*", "c#", "~d", "%e", ":s"];
 
                 invalid.forEach((input) => {
@@ -482,7 +482,7 @@ describe.only("app/Blacklist", function() {
                 expect(result).to.be.eq("success");
             });
 
-            it("should be valid if 'input' matches against /('?[\w-]+'?)+/", () => {
+            it("should be valid if 'input' matches against /('?[\\w-]+'?)+/", () => {
                 var valid = ["a", "abc", "1", "a2", "abc123", "hello-world", "don't"];
 
                 valid.forEach((input) => {
