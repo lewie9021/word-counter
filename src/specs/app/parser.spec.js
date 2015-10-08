@@ -308,6 +308,14 @@ describe("app/parser", function() {
                 expect(result).to.eql(["Some", "examples", "include", "Lewis'"].concat(contractions));
             });
             
+            it("should match words that contain a hyphen", () => {
+                var sentence = "quick-thinking sugar-free";
+                var result = method(sentence);
+
+                expect(result.length).to.eq(2);
+                expect(result).to.eql(["quick-thinking", "sugar-free"]);
+            });
+            
         });
 
         describe("getSpaces", () => {
