@@ -16,7 +16,7 @@ Word density helps me identify frequently used words that could make the article
 
 ### Component Hierarchy
 
-- {component hierarchy diagram}
+![Component Hierarchy Diagram](https://raw.githubusercontent.com/lewie9021/word-counter/master/img/component-hierarchy.png)
 
 ### Dependency Graph (Modules Tree)
 
