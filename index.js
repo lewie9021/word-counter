@@ -1,14 +1,27 @@
+var FS = require("fs");
 var Commander  = require("commander");
 var Webpack = require("webpack");
 var WebpackDevServer = require("webpack-dev-server");
 
 var compiler, config, server;
 
+// Define supported CLI options.
+Commander
+    .option("-w, --watch", "Watch for file changes")
+    .option("-m, --mode [value]", "Build mode")
+    .option("-p, --profile", "Export a stats.json file")
+    .parse(process.argv);
+
 // Called once Webpack has done its thing.
 // Note: This can be executed multiple times.
 function onBundled(err, stats) {
     if (err)
         throw err;
+
+    if (Commander.profile) {
+        FS.writeFileSync("stats.json", JSON.stringify(stats.toJson(), null, 4));
+        return console.log("Successfully exported the stats.json file.");
+    }
 
     console.log(stats.toString({
         // Don't show chunk modules to reduce console spam.
@@ -19,18 +32,14 @@ function onBundled(err, stats) {
     }));
 }
 
-// Define supported CLI options.
-Commander
-    .option("-w, --watch", "Watch for file changes")
-    .option("-m, --mode [value]", "Build mode")
-    .parse(process.argv);
+
 
 // Require the given mode (fallbacks on the dev config).
 config = require("./config/" + (Commander.mode || "dev") + "/webpack.config");
 compiler = Webpack(config);
     
 // Check if we have directly passed a watch option or defined it within the configuration object.
-if (Commander.watch || config.watch) {
+if (!Commander.profile && (Commander.watch || config.watch)) {
     if (config.devServer) {
         server = new WebpackDevServer(compiler, config.devServer);
         server.listen(config.devServer.port, config.devServer.host);
