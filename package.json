@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js --mode dev --watch",
-    "test": "karma start config/test/karma.config.js"
+    "test": "karma start config/test/karma.config.js",
+    "live": "node index.js --mode live"
   },
   "repository": {
     "type": "git",
