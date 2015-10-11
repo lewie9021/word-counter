@@ -63,7 +63,6 @@ module.exports = function(buildMode) {
             css: {},
             sass: {}
         }
-        
     }, extractTextResolver);
 
     // Extract any CSS from bundle.js into a separate file (style.css).
