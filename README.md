@@ -10,8 +10,9 @@ Word density helps me identify frequently used words that could make the article
 
 ### Screenshots
 
-- {main screen}
-- {blacklist modal}
+![Main Screenshot](https://raw.githubusercontent.com/lewie9021/word-counter/master/img/screenshots/main.png)
+
+![Blacklist Screenshot](https://raw.githubusercontent.com/lewie9021/word-counter/master/img/screenshots/blacklist.png)
 
 ### Component Hierarchy
 
