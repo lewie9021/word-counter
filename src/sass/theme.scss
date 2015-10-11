@@ -20,9 +20,16 @@ textarea {
     margin-bottom: 20px;
 }
 
-.stats-container .name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-right: 48px;
+.stats-container {
+    .list-group {
+        max-height: 240px;
+        overflow-y: auto;
+    }
+    
+    .name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 48px;
+    }
 }
