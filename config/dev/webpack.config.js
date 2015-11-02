@@ -8,15 +8,15 @@ function exposeResolver(config, name) {
     return config;
 }
 
-module.exports = (function() {
-    var config = require("../base/webpack.config.js")("dev");
-    var outputPath = Path.join(__dirname, "..", "..", "dist", "dev");
+module.exports = function(config, Commander) {
+    var buildMode = Commander.mode;
+    var outputPath = Path.join(__dirname, "..", "..", "dist", buildMode);
 
     // Define general configuration.
     config.merge({
         // Enable sourcemaps.
-        devtool: "source-map",
-        
+        devtool: "eval-source-map",
+
         // Webpack Dev Server configuration.
         devServer: {
             port: 8080,
@@ -39,10 +39,11 @@ module.exports = (function() {
     });
 
     config.loader("expose", {
-        test: require.resolve("react"),
-        variables: ["React"]
-    }, exposeResolver);
+        // TODO: This is a horrible hack. Implement a better method of retrieving this value.
+        test: config._config.resolve.alias.react,
+        query: "React"
+    });
 
-    // Resolve the configuration in a structure Webpack understands.
-    return config.resolve();
-})();
+    // Return the config instance to be resolved.
+    return config;
+};

@@ -2,14 +2,15 @@ var FS = require("fs");
 var Commander  = require("commander");
 var Webpack = require("webpack");
 var WebpackDevServer = require("webpack-dev-server");
+var config = require("./config");
 
-var compiler, config, server;
+var compiler, server;
 
 // Define supported CLI options.
 Commander
-    .option("-w, --watch", "Watch for file changes")
-    .option("-m, --mode [value]", "Build mode")
-    .option("-p, --profile", "Export a stats.json file")
+    .option("-w, --watch", "Watch for file changes", false)
+    .option("-m, --mode [value]", "Build mode", "dev")
+    .option("-p, --profile", "Export a stats.json file", false)
     .parse(process.argv);
 
 // Called once Webpack has done its thing.
@@ -20,6 +21,7 @@ function onBundled(err, stats) {
 
     if (Commander.profile) {
         FS.writeFileSync("stats.json", JSON.stringify(stats.toJson(), null, 4));
+        
         return console.log("Successfully exported the stats.json file.");
     }
 
@@ -32,11 +34,7 @@ function onBundled(err, stats) {
     }));
 }
 
-
-
-// Require the given mode (fallbacks on the dev config).
-config = require("./config/" + (Commander.mode || "dev") + "/webpack.config");
-compiler = Webpack(config);
+compiler = Webpack(config(Commander));
     
 // Check if we have directly passed a watch option or defined it within the configuration object.
 if (!Commander.profile && (Commander.watch || config.watch)) {
