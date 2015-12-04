@@ -2,6 +2,7 @@
   "name": "word-counter",
   "version": "0.0.1",
   "description": "Simple application that reports on word & character count statistics.",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "dev": "node index.js --mode dev --watch",
