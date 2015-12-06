@@ -377,7 +377,7 @@ describe("components/App", () => {
                 var stats = {
                     a: 1,
                     b: 2,
-                    b: 3
+                    c: 3
                 };
                 var result = method(stats, source);
                 var keys = Object.keys(stats);
@@ -393,7 +393,7 @@ describe("components/App", () => {
                 var stats = {
                     a: 1,
                     b: 2,
-                    b: 3
+                    c: 3
                 };
                 var result = method(stats);
                 var keys = Object.keys(stats);
@@ -409,7 +409,7 @@ describe("components/App", () => {
                 var stats = {
                     a: 1,
                     b: 2,
-                    b: 3
+                    c: 3
                 };
                 var result = method(stats);
                 var keys = Object.keys(stats);
