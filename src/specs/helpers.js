@@ -47,9 +47,30 @@ function getNestedElements(Component, baseProps = {}, func) {
     };
 }
 
+// Simple mock implementation of localStorage.
+function mockStorage() {
+    let store = {};
+    
+    return {
+        getItem: function(key) {
+            return store[key];
+        },
+        setItem: function(key, value) {
+            store[key] = value.toString();
+        },
+        removeItem: function(key) {
+            delete store[key];
+        },
+        clear: function() {
+            store = {};
+        }
+    };
+}
+
 export default {
     renderComponent,
     getMockBlacklist,
     arrayToObject,
-    getNestedElements
+    getNestedElements,
+    mockStorage
 };
