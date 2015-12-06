@@ -1,7 +1,10 @@
 module.exports = function(config) {
     config.set({
         // Run in Chrome and Internet Explorer.
-        browsers: ["Chrome", "IE"], 
+        browsers: [
+            "Chrome",
+            "IE"
+        ], 
 
         singleRun: false,
         
