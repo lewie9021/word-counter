@@ -4,10 +4,13 @@ import Parser from "app/parser";
 import { renderComponent, getNestedElements } from "specs/helpers";
 
 function generateInput() {
+    let input = [];
+    
     // Generate an input of letters A-Z.
-    return Array.from(Array(26).keys()).map((x, i) => {
-        return String.fromCharCode(65 + i);
-    });
+    for (let i = 0; i < 26; i += 1)
+        input.push(String.fromCharCode(65 + i));
+
+    return input;
 }
 
 describe("components/App", () => {
