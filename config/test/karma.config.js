@@ -1,7 +1,7 @@
 module.exports = function(config) {
     config.set({
-        // Run in Chrome.
-        browsers: ["Chrome"], 
+        // Run in Chrome and Internet Explorer.
+        browsers: ["Chrome", "IE"], 
 
         singleRun: false,
         
@@ -51,7 +51,8 @@ module.exports = function(config) {
             require("karma-source-map-support"),
 
             // Launcher for Chrome and Chrome Canary.
-            require("karma-chrome-launcher")
+            require("karma-chrome-launcher"),
+            require("karma-ie-launcher")
         ]
     });
 };
