@@ -1,6 +1,6 @@
 {
   "name": "word-counter",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Simple application that reports on word & character count statistics.",
   "private": true,
   "main": "index.js",
