@@ -1,13 +1,22 @@
+import { mockStorage } from "../helpers";
+
 describe("app/Blacklist", function() {
-    var Module, sandbox;
+    var Module, sandbox, cachedLocalStorage;
     
     beforeEach(() => {
         Module = require("app/Blacklist");
         sandbox = sinon.sandbox.create();
+
+        // Mock window.localStorage so we can stub it.
+        cachedLocalStorage = window.localStorage;
+        Object.defineProperty(window, "localStorage", {value: mockStorage()});
     });
 
     afterEach(() => {
         sandbox.restore();
+
+        // Revert window.localStorage back to the real implementation.
+        Object.defineProperty(window, "localStorage", {value: cachedLocalStorage});
     });
     
     describe("instantiation", () => {
@@ -66,11 +75,11 @@ describe("app/Blacklist", function() {
         });
 
         describe("load", () => {
-
+            
             it("should look for a 'blacklist' item in local storage", () => {
                 var spy = sandbox.spy();
                 var words;
-
+                
                 // Mimic the behaviour that would occur if the 'blacklist' item wasn't in local storage.
                 sandbox.stub(window.localStorage, "getItem", (...args) => {
                     spy(...args);
