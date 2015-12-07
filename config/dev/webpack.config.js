@@ -15,7 +15,7 @@ module.exports = function(config, Commander) {
     // Define general configuration.
     config.merge({
         // Enable sourcemaps.
-        devtool: "eval-source-map",
+        devtool: "cheap-eval-source-map",
 
         // Webpack Dev Server configuration.
         devServer: {
