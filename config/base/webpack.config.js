@@ -4,6 +4,12 @@ var WebpackConfig = require("webpack-configurator");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlPlugin = require("html-webpack-plugin");
 
+// A map of dependencies pre-compiled to improve compile time.
+var dependencies = {
+    "react": "react/dist/react.min.js",
+    "react-bootstrap": "react-bootstrap/dist/react-bootstrap.min.js"
+};
+
 // Define how the sass-loader should be resolved.
 function extractTextResolver(config) {
     // Build up a loader string.
@@ -20,20 +26,32 @@ function extractTextResolver(config) {
     return config;
 }
 
-module.exports = function(buildMode) {
-    var config = new WebpackConfig();
+module.exports = function(config, Commander) {
+    var buildMode = Commander.mode;
     var rootPath = Path.join(__dirname, "..", "..");
-    var outputPath = Path.join(rootPath, "dist", buildMode);
+    var modulesPath = Path.join(rootPath, "node_modules");
 
     // Define general configuration.
     config.merge({
         entry: Path.join(__dirname, "..", buildMode, "app.entry.js"),
+        
         output: {
-            path: outputPath,
+            path: Path.join(rootPath, "dist", buildMode),
             filename: "bundle.js"
         },
 
+        module: {
+            noParse: Object.keys(dependencies).map(function(name) {
+                return Path.resolve(modulesPath, dependencies[name]);
+            })
+        },
+        
         resolve: {
+            alias: Object.keys(dependencies).reduce(function(obj, name) {
+                obj[name] = Path.resolve(modulesPath, dependencies[name]);
+
+                return obj;
+            }, {}),
             root: Path.join(rootPath, "src"),
             extensions: ["", ".js", ".jsx", ".scss", ".css"]
         }
@@ -50,7 +68,7 @@ module.exports = function(buildMode) {
             ]
         }
     });
-
+    
     // Enable misc files to required.
     config.loader("url", {
         test: /\.(woff2?|ttf|eot|svg)$/
@@ -58,12 +76,18 @@ module.exports = function(buildMode) {
 
     config.loader("sass", {
         test: /\.scss$/,
-        exclude: /node_modules/,
+        include: Path.resolve(rootPath, "src", "sass"),
         loaders: {
             css: {},
             sass: {}
         }
     }, extractTextResolver);
+
+    // Prevent react-bootstrap from complaining about 'require'.
+    config.loader("imports-react-boostrap", {
+        test: Path.resolve(modulesPath, dependencies["react-bootstrap"]),
+        loader: "imports"
+    });
 
     // Extract any CSS from bundle.js into a separate file (style.css).
     config.plugin("extract-text", ExtractTextPlugin, ["style.css"]);
