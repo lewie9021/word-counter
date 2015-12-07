@@ -2,9 +2,9 @@ var FS = require("fs");
 var Commander  = require("commander");
 var Webpack = require("webpack");
 var WebpackDevServer = require("webpack-dev-server");
-var config = require("./config");
+var getConfig = require("./config");
 
-var compiler, server;
+var config, compiler, server;
 
 // Define supported CLI options.
 Commander
@@ -34,12 +34,17 @@ function onBundled(err, stats) {
     }));
 }
 
-compiler = Webpack(config(Commander));
+config = getConfig(Commander);
+compiler = Webpack(config);
     
 // Check if we have directly passed a watch option or defined it within the configuration object.
 if (!Commander.profile && (Commander.watch || config.watch)) {
     if (config.devServer) {
         server = new WebpackDevServer(compiler, config.devServer);
+
+        // Print to console the port we're listening on.
+        console.log("listening on", config.devServer.host + ":" + config.devServer.port);
+        
         server.listen(config.devServer.port, config.devServer.host);
     } else {
         compiler.watch({
